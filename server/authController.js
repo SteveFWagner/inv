@@ -32,9 +32,40 @@ module.exports={
         }
     },
     login: async (req,res) => {
+        try{
+            const db = req.app.get('db')
+            const {session} = req
+            const {email, password} = req.body
 
+            let user = await db.auth.login(email)
+            user = user[0]
+            
+            let authed = crypt.compareSync(password,user.password)
+            if(authed){
+                delete user.password
+                session.user = user
+                res.status(200).send(session.user)
+            }else {
+                res.sendStatus(401)
+            }
+            
+        }catch(err){
+            console.log(err)
+        }
     },
     logout: (req,res) => {
-
+        console.log(req.session)
+        req.session.destroy()
+        console.log(req.session)
+        console.log('destroyed session')
+        res.sendStatus(200)
+    },
+    userCheck: (req,res) => {
+        const {user} = req.session
+        if(user){
+            res.status(200).send(user)
+        }else{
+            res.sendStatus(401)
+        }
     }
 }

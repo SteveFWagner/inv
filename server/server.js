@@ -2,16 +2,27 @@ require('dotenv').config()
 const express = require('express')
 const massive = require('massive')
 const session = require('express-session')
+const pg = require('pg')
+const pgSession = require('connect-pg-simple')(session)
+
 
 const app = express()
 const {SERVER_PORT,SESSION_SECRET,CONNECTION_STRING} = process.env
 const PORT = SERVER_PORT
 
+const pgPool = new pg.Pool({
+    connectionString:CONNECTION_STRING
+})
+
 const auth = require('./authController')
 const ct = require('./apiController')
 
+
 app.use(express.json())
 app.use(session({
+    store:new pgSession({
+        pool: pgPool
+    }),
     secret:SESSION_SECRET,
     resave:false,
     saveUninitialized:true,
@@ -30,9 +41,10 @@ massive(CONNECTION_STRING).then(db =>{
 
 //Auth Endpoints
 
-    // app.post('/auth/login', auth.login)
-    // app.post('/auth/logout', auth.logout)
+    app.post('/auth/login', auth.login)
+    app.post('/auth/logout', auth.logout)
     app.post('/auth/register', auth.register)
+    app.get('/auth/current', auth.userCheck)
 
 //API Endpoints
 
