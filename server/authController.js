@@ -59,10 +59,9 @@ module.exports={
     },
     logout: (req,res) => {
         console.log(req.session)
-        req.session.destroy()
-        console.log(req.session)
-        console.log('destroyed session')
-        res.sendStatus(200)
+        req.session.destroy(function(){
+            res.sendStatus(200)
+        })
     },
     userCheck: (req,res) => {
         const {user} = req.session

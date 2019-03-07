@@ -22,15 +22,11 @@ class Nav extends Component{
 
     componentDidMount(){
         this.userCheck()
+        window.onhashchange = () => {
+            this.userCheck()
+        }
     }
 
-    // componentDidUpdate(prevProps,prevState){
-    //     console.log("prevProps", prevProps)
-    //     console.log('this.props', this.props)
-    //     if(prevProps.id !== this.props.id){
-    //         this.userCheck()
-    //     }
-    // }
 
     userCheck= async ()=>{
         const {id} = this.props

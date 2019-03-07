@@ -23,22 +23,30 @@ class Materials extends Component{
         })
     }
 
+    handleCashAdjust(num, num2 = 0){
+        let cents = num*100
+        let cents2 = num2*100
+        num = ((cents+cents2)/100).toLocaleString()
+        return num
+    }
 
     render(){
-        console.log('State @ Materials',this.state)
         let mappedMaterials = this.state.materials
         .map(value =>{
             return {...value, name:value.name.toUpperCase()}})
         .map(val => {
+            val.cost_per_uom = this.handleCashAdjust(val.cost_per_uom)
+            val.cost_on_hand = this.handleCashAdjust(val.cost_on_hand)
             const {id, name, uom, cost_per_uom, on_hand, order_point, cost_on_hand} = val
+
             return(
                 <div key={id} style={{borderRight:'2px grey solid', margin:'5px', padding:'5px'}}>
                     <h3>{name}</h3>
                     <h6>ITEM: 00{id}</h6>
-                    <h6>OnHand: {on_hand}{uom}</h6>
-                    <h6>Order Point:{order_point}</h6>
-                    <h6>Cost Per {uom}: ${cost_per_uom}</h6>
-                    <h6>Cost On Hand: ${cost_on_hand}</h6>
+                    <h6>ONHAND: {on_hand}{uom}</h6>
+                    <h6>ORDER POINT:{order_point}</h6>
+                    <h6>COST: ${cost_per_uom}/{uom}</h6>
+                    <h6>COST ON HAND: ${cost_on_hand}</h6>
                 </div>
             )
         })
@@ -60,8 +68,8 @@ class Materials extends Component{
                     {mappedMaterials}
                 </div>
                 <div style={{display:'flex', justifyContent:'space-around', borderTop:'2px grey solid', marginTop:'15px'}}>
-                    <h4>Total Cost on Hand: ${totalCost}</h4>
-                    <h4>Unique Materials: {uniqueMaterials}</h4>
+                    <h4>TOTAL COST ONHAND: ${totalCost}</h4>
+                    <h4>UNIQUE MATERIALS: {uniqueMaterials}</h4>
                 </div>
             </div>
         )
