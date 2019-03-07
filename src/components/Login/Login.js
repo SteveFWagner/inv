@@ -16,6 +16,26 @@ class Login extends Component{
         this.handleLogin=this.handleLogin.bind(this)
     }
 
+    componentDidMount(){
+        this.userCheck()
+    }
+
+    userCheck(){
+        const {id} = this.props
+        if(id <= 0){
+            Axios.get('/auth/current')
+            .then(res => {this.props.updateUser(res.data)})
+            .then( () => {
+                if(id > 0){
+                    this.props.history.push('/overview')
+                }
+            })
+            .catch(err => console.log('no user in dux or sess',err))
+        }else if (id > 0){
+            this.props.history.push('/overview')
+        }
+    }
+
     handleUserInput(prop,val){
         this.setState({
             [prop]:val
@@ -31,15 +51,16 @@ class Login extends Component{
         ).catch(err => alert("Email already exists!"))
     }
 
-    handleLogin(){
+    handleLogin = async () =>{
         const {email, password} = this.state
-        Axios.post('/auth/login',{email,password}).then(res => {
-            console.log('res@login',res)
-            console.log(this.props)
-            this.props.updateUser(res.data)  
-        }).then(
-            this.props.history.push('/overview')
-        ).catch(err=>console.log(err))
+        try{
+            let res = await Axios.post('/auth/login',{email,password})
+            await this.props.updateUser(res.data)
+            await this.props.history.push('/overview')
+        }catch(err){
+            alert('Incorrect Login')
+        }
+        
     }
 
     render(){

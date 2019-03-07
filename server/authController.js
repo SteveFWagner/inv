@@ -40,6 +40,10 @@ module.exports={
             let user = await db.auth.login(email)
             user = user[0]
             
+            if(!user){
+                return res.sendStatus(404)
+            }
+
             let authed = crypt.compareSync(password,user.password)
             if(authed){
                 delete user.password

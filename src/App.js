@@ -1,26 +1,22 @@
 import React, { Component } from 'react';
-import{HashRouter} from 'react-router-dom'
-import {Provider} from 'react-redux'
+import{withRouter} from 'react-router-dom'
+
 
 import routes from './routes'
 import Nav from './components/Nav/Nav'
-import store from './dux/store'
 
 
 
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <HashRouter>
           <div>
-            <Nav/>
+            <Nav location={this.props.location} history={this.props.history}/>
             {routes}
           </div>
-        </HashRouter>
-      </Provider>
+
     );
   }
 }
 
-export default App;
+export default withRouter(App)

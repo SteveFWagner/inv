@@ -15,6 +15,6 @@ export default(
         <Route path='/overview' component={Overview}/>
         <Route path='/template' component={Template}/>
         <Route path='/create' component={Create}/>
-        <Route path='/' component={Login}/>
+        <Route exact path='/' component={Login}/>
     </Switch>
 )

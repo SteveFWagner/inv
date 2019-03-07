@@ -3,7 +3,6 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {clearUser, updateUser} from '../../dux/reducer'
 import Axios from 'axios';
-import {withRouter} from 'react-router-dom'
 
 
 class Nav extends Component{
@@ -17,7 +16,7 @@ class Nav extends Component{
         Axios.post('/auth/logout')
         .then(this.props.clearUser())
         .then(this.props.history.push('/'),
-        console.log(this.props)
+        // console.log(this.props)
         )
     }
 
@@ -25,42 +24,56 @@ class Nav extends Component{
         this.userCheck()
     }
 
-    userCheck(){
+    // componentDidUpdate(prevProps,prevState){
+    //     console.log("prevProps", prevProps)
+    //     console.log('this.props', this.props)
+    //     if(prevProps.id !== this.props.id){
+    //         this.userCheck()
+    //     }
+    // }
+
+    userCheck= async ()=>{
         const {id} = this.props
-        if(id <= 0){
-            Axios.get('/auth/current').then(res => {
+        if(!id){
+            try{
+                let res = await Axios.get('/auth/current')
                 this.props.updateUser(res.data)
-                this.props.history.push('/overview')
-            }).catch(err => console.log(err))
-        }else{
-            this.props.history.push('/overview')
+                // console.log(res.data)
+            }catch(err){
+                console.log(111111, err)
+                this.props.history.push('/') //redirect
+            }
         }
     }
+
+
     render(){
-        if(this.props.location.pathname !== '/'){
-               
-            return(
-                <div>
-                    <div style={{display:'flex', justifyContent:'space-around'}}>
-                        <h5>Current user: {this.props.email}</h5>
-                        <h2>LOGO</h2>
-                        <button onClick={this.handleLogout}>Logout</button>
-                    </div>
-                    <div style={{display:'flex', justifyContent:'space-around'}}>
-                        <Link to='/overview'>Overview</Link>
-                        <Link to='/products'>Products</Link>
-                        <Link to='/materials'>Materials</Link>
-                        <Link to='/template'>New Product Template</Link>
-                        <Link to='/create'>Create Products & Add Inv</Link>
-                    </div>
+        // console.log('@nav111',this.props.location.pathname)
+            if(this.props.location.pathname !== '/'){
+                return(
+                    <div>
+                <div style={{display:'flex', justifyContent:'space-around'}}>
+                    <h5>Current user: {this.props.email}</h5>
+                    <h2>LOGO</h2>
+                    <button onClick={this.handleLogout}>Logout</button>
                 </div>
-            )
-        }else{
-            return null
-        }
-    } 
+                <div style={{display:'flex', justifyContent:'space-around'}}>
+                    <Link to='/overview'>Overview</Link>
+                    <Link to='/products'>Products</Link>
+                    <Link to='/materials'>Materials</Link>
+                    <Link to='/template'>New Product Template</Link>
+                    <Link to='/create'>Create Products & Add Inv</Link>
+                </div>
+                </div>
+                )
+            }
+        return null    
+    }
 
 }
+
+
+
 
 function mapStateToProps(state){
     return{
@@ -68,4 +81,4 @@ function mapStateToProps(state){
         email:state.email
     }
 }
-export default connect(mapStateToProps,{clearUser, updateUser})(withRouter(Nav))
+export default connect(mapStateToProps,{clearUser, updateUser})(Nav)

@@ -48,11 +48,10 @@ massive(CONNECTION_STRING).then(db =>{
 
 //API Endpoints
 
-    // app.get('/api/materials', ct.getMaterials)
-    // app.get('/api/products', ct.getProducts)
-    // app.get('/api/overview', ct.getoverview)
+    app.get('/api/materials', ct.getMaterials)
+    app.get('/api/products', ct.getProducts)
+    app.get('/api/overview', ct.getOverview)
     // app.post('/api/create/template', ct.createTemplate)
-    // app.post('/api/counter', ct.counter)
     // app.post('/api/create/material', ct.createMaterial)
     // app.put('/api/update/onhand/material', ct.updateOnhandMaterial)
     // app.put('/api/update/onhand/product', ct.updateOnhandProduct)
