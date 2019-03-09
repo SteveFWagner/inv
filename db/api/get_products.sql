@@ -3,3 +3,8 @@ FROM product_templates
 JOIN products ON products.id = product_templates.product_id
 JOIN materials ON materials.id = product_templates.material_id
 
+-- SELECT SUM(cost_per_uom*qty), products.name
+-- FROM product_templates
+-- JOIN products ON products.id = product_templates.product_id
+-- JOIN materials ON materials.id = product_templates.material_id
+-- GROUP BY(products.name)

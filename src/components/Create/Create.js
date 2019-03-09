@@ -1,13 +1,154 @@
 import React, {Component} from 'react'
+import Dropdown from 'react-dropdown'
+import Axios from 'axios';
 
 
 class Create extends Component{
+    constructor(props){
+        super(props)
+        this.state={
+            productTemplates:[],
+            materials:[],
+            dropdown:``,
+            mName:``,
+            mOnhand:0,
+            mOrderPoint:0,
+            mCost:0,
+            mUOM:``,
+            selectedTemplate:``
+        }
+    }
+
+    componentDidMount(){
+        this.getTemplates()
+    }
+
+    getTemplates(){
+        Axios.get('/api/templates')
+        .then(res => {
+            this.setState({
+                productTemplates: res.data
+            })
+        })
+
+    }
+
+    handleDropdown(prop,e){
+        this.setState({
+            [prop]:e.value
+        })
+    }
+
+    handleUserInput=(prop,val)=>{
+        this.setState({
+            [prop]:val
+        })
+    }
+
+    handleCreateMaterial=()=>{
+        //axios POST with mState values
+        console.log('hit')
+        const {mName:name, mUOM:uom, mCost:cost_per_uom, mOnHand:on_hand, mOrderPoint:order_point} = this.state
+        Axios.post('/api/create/material',{name, uom, cost_per_uom, on_hand, order_point})
+        .then(res => {
+            const {name, id} = res.data[0]
+            console.log(res)
+            alert(`Success! ${name} created with ITEM#:00${id}`)
+        })
+        .catch(err => alert('This Material Already Exists.'))
+    }
+
+    handleProductDisplay=()=>{
+        if(this.state.selectedTemplate === 'NEW PRODUCT'){
+            return(
+                <>
+                DISPLAY FORM
+                </>
+            )
+        }else if(this.state.selectedTemplate){
+            let productDetails = []
+            this.state.productTemplates.forEach(product => {
+                if(product.name.toUpperCase() === this.state.selectedTemplate){
+                    productDetails.push(product)
+                }
+            })
+            let materialsUsed = productDetails.map(product => {
+                return(
+                    <div key={product.material_id}>
+                        <p>{product.material_name}</p>
+                        <p>{product.qty}</p>
+                    </div>
+                )
+            })
+            console.log(productDetails)
+            return(
+                <>
+                DISPLAY SELECTED TEMPLATE
+                <h3>NAME: </h3>
+                <p>ITEM: </p>
+                <p>ONHAND: </p>
+                <p>MATERIALS NEEDED</p>
+                {materialsUsed}
+                <button>CREATE!</button>
+                </>
+            )
+        }
+    }
+
+    handleFormDisplay=()=>{
+        if(this.state.dropdown === "MATERIALS"){
+            return(
+                <div>
+                    <input onChange={(e)=>this.handleUserInput('mName',e.target.value)} placeholder="Material Name"></input><br/>
+                    <input onChange={(e)=>this.handleUserInput('mOnHand',e.target.value)} placeholder="Onhand"></input><br/>
+                    <input onChange={(e)=>this.handleUserInput('mOrderPoint',e.target.value)} placeholder="Order Point"></input><br/>
+                    <input onChange={(e)=>this.handleUserInput('mCost',e.target.value)} placeholder="Cost"></input><br/>
+                    <input onChange={(e)=>this.handleUserInput('mUOM',e.target.value)} placeholder="Unit of Measurement"></input><br/>
+                    <button onClick={this.handleCreateMaterial}>CREATE</button>
+                </div>
+            )
+        }else if(this.state.dropdown === "PRODUCTS"){
+            let productDropdown = ['NEW PRODUCT'] //get the templates from db
+            let productNames = []
+            this.state.productTemplates.forEach(product =>{
+                productNames.push(product.name.toUpperCase())
+            })
+            productDropdown = [...productDropdown, ...new Set(productNames)]
+            let productDisplay = this.handleProductDisplay()
+            return(
+                <div>
+
+                    <div style={{border:'2px black solid', display:'flex', justifyContent:'space-between', padding:'5px'}}>
+                    <Dropdown options={productDropdown} onChange={(e)=>this.handleDropdown('selectedTemplate',e)} 
+                    placeholder="SELECT A PRODUCT TO CREATE" value={this.state.selectedTemplate} />
+                    <p style={{margin:'0'}}>▼</p>
+                    </div>
+                    {productDisplay}
+                </div>
+            )
+        }else {
+            return null
+        }
+    }
+    
     render(){
+        console.log('State @ Create',this.state)
+        const options = ['MATERIALS', 'PRODUCTS']
+        let form = this.handleFormDisplay()
+
         return(
-            <div>
-                Create
+            <div style={{display:'flex', justifyContent:'space-around'}}>
+                <div>
+                    <h1>CREATE</h1>
+                    <div style={{border:'2px black solid', display:'flex', justifyContent:'space-between', padding:'5px'}}>
+                    <Dropdown options={options} onChange={(e)=>this.handleDropdown('dropdown',e)} placeholder="SELECT AN OPTION" value={this.state.dropdown} />
+                    <p style={{margin:'0'}}>▼</p>
+                    </div>
+                    {form}
+                </div>
             </div>
         )
+        
     }
 
 }

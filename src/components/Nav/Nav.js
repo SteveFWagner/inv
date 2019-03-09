@@ -50,7 +50,7 @@ class Nav extends Component{
                     <div>
                 <div style={{display:'flex', justifyContent:'space-around'}}>
                     <h5>Current user: {this.props.email}</h5>
-                    <h2>LOGO</h2>
+                    <h1>inv</h1>
                     <button onClick={this.handleLogout}>Logout</button>
                 </div>
                 <div style={{display:'flex', justifyContent:'space-around'}}>
