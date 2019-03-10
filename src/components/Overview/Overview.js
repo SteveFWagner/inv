@@ -49,11 +49,9 @@ class Overview extends Component{
                 if(val.material_id === arr[i+1].material_id){
                     val.qty = (arr[i+1].qty + val.qty)
                     arr.splice(arr[i+1],1)
-                    console.log('hit', val)
                     return val
                 }
             }
-            console.log('hit2')
             return val
         }).filter(val => val != null)
 
@@ -64,8 +62,6 @@ class Overview extends Component{
         .map(matVal => {
             mappedOV.forEach( ovVal => {
                 if(matVal.id === ovVal.material_id){
-                    console.log('hit', {ovVal})
-                    console.log('hit', {matVal})
                     matVal = {...matVal,...ovVal}
                     return matVal
                 }
@@ -90,7 +86,6 @@ class Overview extends Component{
                 </div>
             )
         })
-        console.log({mappedMaterials})
 
         return(
             <div>

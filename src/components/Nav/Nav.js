@@ -9,8 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-
-
+import MenuIcon from '@material-ui/icons/Menu'
+import MenuLink from '@material-ui/core/Link'
 
 class Nav extends Component{
     constructor(props){
@@ -78,33 +78,34 @@ class Nav extends Component{
                                     <Button color='inherit' onClick={this.handleLogout}>LOGOUT</Button>
                                 </Typography>
                                 <Typography variant='h1' color='inherit'>
-                                    iNV
+                                    inv
                                 </Typography>
                                 <Button color='inherit' 
                                 aria-owns={anchorEl ? 'menu' : undefined}
                                 aria-haspopup="true"
                                 onClick={this.handleMenuClick}>
-                                        MENU
+                                        <MenuIcon style={{fontSize:'38'}}/>
                                 </Button>
                                 <Menu
                                 id='menu' anchorEl={anchorEl}
                                 open={Boolean(anchorEl)}
                                 onClose={this.handleMenuClose}>
                                     <MenuItem onClick={this.handleMenuClose}>
-                                        <Link to='/overview'>Overview</Link>
+                                            <MenuLink component={Link} to='/overview'>OVERVIEW</MenuLink>
                                     </MenuItem>
                                     <MenuItem onClick={this.handleMenuClose}>
-                                        <Link to='/products'>Products</Link>
+                                        <MenuLink component={Link} to='/products'>PRODUCTS</MenuLink>
                                     </MenuItem>
                                     <MenuItem onClick={this.handleMenuClose}>
-                                        <Link to='/materials'>Materials</Link>
+                                        <MenuLink component={Link} to='/materials'>MATERIALS</MenuLink>
                                     </MenuItem>
                                     <MenuItem onClick={this.handleMenuClose}>
-                                        <Link to='/create'>Create Products & Add Inv</Link>
+                                        <MenuLink component={Link} to='/create'>CREATE</MenuLink>
                                     </MenuItem>
                                 </Menu>
                             </Toolbar>
                         </AppBar>
+                        
                     </div>
                 )
             }
