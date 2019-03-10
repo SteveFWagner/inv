@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Dropdown from 'react-dropdown'
 import Axios from 'axios';
+import NewTemplateForm from './NewTemplateForm'
 
 
 class Create extends Component{
@@ -62,32 +63,34 @@ class Create extends Component{
         if(this.state.selectedTemplate === 'NEW PRODUCT'){
             return(
                 <>
-                DISPLAY FORM
+                    <NewTemplateForm/>
                 </>
             )
         }else if(this.state.selectedTemplate){
             let productDetails = []
+            let productDetails2 = {}
             this.state.productTemplates.forEach(product => {
                 if(product.name.toUpperCase() === this.state.selectedTemplate){
                     productDetails.push(product)
+                    const {id, name, on_hand} = product
+                    productDetails2 = {id, name, on_hand}
+
                 }
             })
             let materialsUsed = productDetails.map(product => {
                 return(
                     <div key={product.material_id}>
-                        <p>{product.material_name}</p>
-                        <p>{product.qty}</p>
+                        <li>{(product.material_name).toUpperCase()}: {product.qty}</li>
                     </div>
                 )
             })
-            console.log(productDetails)
             return(
                 <>
-                DISPLAY SELECTED TEMPLATE
-                <h3>NAME: </h3>
-                <p>ITEM: </p>
-                <p>ONHAND: </p>
-                <p>MATERIALS NEEDED</p>
+                SELECTED TEMPLATE
+                <h3>NAME: {(productDetails2.name).toUpperCase()}</h3>
+                <p>ITEM: {productDetails2.id}</p>
+                <p>ONHAND: {productDetails2.on_hand}</p>
+                <p>MATERIALS NEEDED:</p>
                 {materialsUsed}
                 <button>CREATE!</button>
                 </>
@@ -132,7 +135,7 @@ class Create extends Component{
     }
     
     render(){
-        console.log('State @ Create',this.state)
+        // console.log('State @ Create',this.state)
         const options = ['MATERIALS', 'PRODUCTS']
         let form = this.handleFormDisplay()
 

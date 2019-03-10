@@ -3,13 +3,35 @@ import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {clearUser, updateUser} from '../../dux/reducer'
 import Axios from 'axios';
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+
 
 
 class Nav extends Component{
     constructor(props){
         super(props)
+        this.state={
+            anchorEl:null
+        }
 
         this.handleLogout=this.handleLogout.bind(this)
+    }
+
+    handleMenuClick = (e) => {
+        this.setState({
+            anchorEl:e.currentTarget
+        })
+    }
+
+    handleMenuClose = () =>{
+        this.setState({
+            anchorEl:null
+        })
     }
 
     handleLogout (){
@@ -45,22 +67,45 @@ class Nav extends Component{
 
     render(){
         // console.log('@nav111',this.props.location.pathname)
+        const {anchorEl} = this.state
             if(this.props.location.pathname !== '/'){
                 return(
                     <div>
-                <div style={{display:'flex', justifyContent:'space-around'}}>
-                    <h5>Current user: {this.props.email}</h5>
-                    <h1>inv</h1>
-                    <button onClick={this.handleLogout}>Logout</button>
-                </div>
-                <div style={{display:'flex', justifyContent:'space-around'}}>
-                    <Link to='/overview'>Overview</Link>
-                    <Link to='/products'>Products</Link>
-                    <Link to='/materials'>Materials</Link>
-                    <Link to='/template'>New Product Template</Link>
-                    <Link to='/create'>Create Products & Add Inv</Link>
-                </div>
-                </div>
+                        <AppBar position='static'>
+                            <Toolbar style={{display:'flex', justifyContent:'space-between', backgroundColor:'#252525'}}>
+                                <Typography variant='h3' color='inherit' style={{display:'flex', flexDirection:'column'}}>
+                                    {this.props.email}
+                                    <Button color='inherit' onClick={this.handleLogout}>LOGOUT</Button>
+                                </Typography>
+                                <Typography variant='h1' color='inherit'>
+                                    iNV
+                                </Typography>
+                                <Button color='inherit' 
+                                aria-owns={anchorEl ? 'menu' : undefined}
+                                aria-haspopup="true"
+                                onClick={this.handleMenuClick}>
+                                        MENU
+                                </Button>
+                                <Menu
+                                id='menu' anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={this.handleMenuClose}>
+                                    <MenuItem onClick={this.handleMenuClose}>
+                                        <Link to='/overview'>Overview</Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={this.handleMenuClose}>
+                                        <Link to='/products'>Products</Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={this.handleMenuClose}>
+                                        <Link to='/materials'>Materials</Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={this.handleMenuClose}>
+                                        <Link to='/create'>Create Products & Add Inv</Link>
+                                    </MenuItem>
+                                </Menu>
+                            </Toolbar>
+                        </AppBar>
+                    </div>
                 )
             }
         return null    
