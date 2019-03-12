@@ -26,7 +26,7 @@ class Products extends Component{
     handleCashAdjust(num, num2 = 0){
         let cents = num*100
         let cents2 = num2*100
-        num = ((cents+cents2)/100).toLocaleString()
+        num = ((cents+cents2)/100)
         return num
     }
 
@@ -63,7 +63,7 @@ class Products extends Component{
                     <h6>ITEM: 00{product_id}</h6>
                     <h6>OHAND: {on_hand}</h6>
                     <h6>COST EACH: ${material_cost}</h6>
-                    <h6>COST ONHAND: ${cost_on_hand}</h6>
+                    <h6>COST ONHAND: ${(cost_on_hand).toLocaleString()}</h6>
                 </div>
             )
         })
@@ -72,11 +72,11 @@ class Products extends Component{
         
         combinedProducts.forEach(val => {
             let cents = val.cost_on_hand*100
-            totalCost += cents 
+            totalCost += cents
         })
         totalCost = (totalCost/100).toLocaleString()
 
-        const uniqueMaterials = this.state.products.length
+        const uniqueProducts = this.state.products.length
         
         return(
             <div>
@@ -87,7 +87,7 @@ class Products extends Component{
                 </div>
                 <div style={{display:'flex', justifyContent:'space-around', borderTop:'2px grey solid', marginTop:'15px'}}>
                     <h4>TOTAL COST ONHAND: ${totalCost}</h4>
-                    <h4>UNIQUE PRODUCTS: {uniqueMaterials}</h4>
+                    <h4>UNIQUE PRODUCTS: {uniqueProducts}</h4>
                 </div>
             </div>
         )

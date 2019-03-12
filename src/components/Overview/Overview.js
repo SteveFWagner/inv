@@ -81,8 +81,8 @@ class Overview extends Component{
                     <h6>COST: ${cost_per_uom}/{uom}</h6>
                     <h6>MATERIAL ONHAND: {on_hand}{uom}</h6>
                     <h6>MATERIAL IN PRODUCT ONHAND: {qty}</h6>
-                    <h6>MATERIAL ONHAND TOTAL: {totOnHand}</h6>
-                    <h6>COST ON HAND: ${costTot}</h6>
+                    <h6>MATERIAL ONHAND TOTAL: {totOnHand.toLocaleString()}</h6>
+                    <h6>COST ON HAND: ${(costTot).toLocaleString()}</h6>
                 </div>
             )
         })

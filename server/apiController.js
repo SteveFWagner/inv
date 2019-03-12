@@ -24,7 +24,42 @@ module.exports={
         .catch(err => console.log(err))
     },
     createTemplate: (req,res) =>{
-        
+        const db = req.app.get('db')
+        const {productName, addMatIds} = req.body
+        db.api.check_products(productName)
+        .then(resp =>{
+            if(resp.length){
+                res.status(409).send('Duplicate Product Name Found.')
+            }else{
+                db.api.create_product(productName, 0)
+                .then(response => {
+                    console.log(response)
+                    const {id} = response[0]
+                    console.log(id)
+                    const materials = addMatIds.map(material => {
+                        material.product_id = id
+                        return material
+                    })
+                    console.log(materials)
+                    let materialsAdded = 0
+                    for(let i = 0;i<materials.length;i++){
+                        const {product_id, id, qty} = materials[i]
+                        db.api.create_template(product_id, id, qty)
+                        .then(()=>{
+                            materialsAdded++
+                            if(materialsAdded == materials.length){
+                                res.sendStatus(200)
+                            }
+                        }).catch(err => console.log(err))
+                    }
+                    // materials.forEach(mat => {
+                    //     const {product_id, id, qty} = mat
+                    //     db.api.create_template(product_id, id, qty)
+                    //     .catch(err => console.log(err))
+                    // })   
+                }).catch(err => console.log(err))
+            }
+        })
     },
     createMaterial: (req,res) =>{
         //adding in a new material to inventory -- check name against current materials and stop the add if it already exists

@@ -42,14 +42,13 @@ class newTemplateForm extends Component{
         })
     }
 
-    handleSelectMaterialChange=(e,index)=>{
+    handleSelectMaterialChange=(e,index,prop)=>{
         console.log({e})
         const tempMatsCopy = [...this.state.templateMaterials]
-        tempMatsCopy[index] = {...tempMatsCopy[index], name:e.target.value}
+        tempMatsCopy[index] = {...tempMatsCopy[index], [prop]:e.target.value}
         this.setState({
             templateMaterials:tempMatsCopy
         })
-
     }
 
     handleAddMaterial=()=>{
@@ -58,9 +57,7 @@ class newTemplateForm extends Component{
             qty:''
         }
         const stateCopy = this.state.templateMaterials.map(obj => ({...obj}))
-        console.log(stateCopy)
         const addBlank = [...stateCopy, {...objBuilder}]
-        console.log({addBlank})
         this.setState({
             templateMaterials:addBlank
         })
@@ -69,9 +66,13 @@ class newTemplateForm extends Component{
     }
 
     handleRemoveMaterial=()=>{
-        if(this.state.additionalMaterialCount > 1){
+        if(this.state.templateMaterials.length > 1){
+            const stateCopy = this.state.templateMaterials.map(obj =>({...obj}))
+            console.log({stateCopy})
+            stateCopy.splice((this.state.templateMaterials.length-1),1)
+            console.log({stateCopy})
             this.setState({
-                additionalMaterialCount:(this.state.additionalMaterialCount-1)
+                templateMaterials:stateCopy
             })
         }
         
@@ -93,16 +94,34 @@ class newTemplateForm extends Component{
                         <FormControl style={{width:'100%', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                             <InputLabel>Material</InputLabel>
                             <Select  style={{width:'50%'}}
-                            onChange={(e)=>this.handleSelectMaterialChange(e,i)} value={this.state.templateMaterials[i].name}>
+                            onChange={(e)=>this.handleSelectMaterialChange(e,i,'name')} value={this.state.templateMaterials[i].name}>
                                 {mappedMaterials}
                             </Select>
-                            <TextField margin='normal' label='Qty' style={{width:'20%'}}/>
+                            <TextField margin='normal' label='Qty' style={{width:'20%'}}
+                            onChange={(e)=>this.handleSelectMaterialChange(e,i,'qty')}/>
                         </FormControl>
                     </div>
                 )
             })
             return mappedTemplateMaterials
         
+    }
+
+    handleCreate=()=>{
+        //loop through temlpateMats, assigning the correct material id to them
+        console.log(11111, this.state.templateMaterials)
+        const {productName} = this.state
+        const addMatIds = this.state.templateMaterials.map(material => {
+            this.state.materials.forEach(mat => {
+                if(mat.name === material.name){
+                    material.id = mat.id
+                }
+            })
+            return material
+        })
+        console.log(22222,addMatIds)
+        Axios.post('/api/create/template',{productName,addMatIds})
+        .then(res => console.log(res))
     }
 
     render(){
@@ -120,7 +139,7 @@ class newTemplateForm extends Component{
                     <Button><AddIcon style={{fontSize:20}} onClick={this.handleAddMaterial}/></Button>
                     <Button><RemoveIcon style={{fontSize:20}} onClick={this.handleRemoveMaterial}/></Button>
                 </div>
-                <Button variant='contained' style={{margin:20}}>Create Template</Button>
+                <Button variant='contained' style={{margin:20}} onClick={this.handleCreate}>Create Template</Button>
             </div>
         )
     }

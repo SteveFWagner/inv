@@ -21,7 +21,8 @@ const ct = require('./apiController')
 app.use(express.json())
 app.use(session({
     store:new pgSession({
-        pool: pgPool
+        pool: pgPool,
+        pruneSessionInterval: 60 * 60 * 24
     }),
     secret:SESSION_SECRET,
     resave:false,
@@ -52,7 +53,7 @@ massive(CONNECTION_STRING).then(db =>{
     app.get('/api/products', ct.getProducts)
     app.get('/api/overview', ct.getOverview)
     app.get('/api/templates', ct.getTemplates)
-    // app.post('/api/create/template', ct.createTemplate)
+    app.post('/api/create/template', ct.createTemplate)
     app.post('/api/create/material', ct.createMaterial)
     // app.put('/api/update/onhand/material', ct.updateOnhandMaterial)
     // app.put('/api/update/onhand/product', ct.updateOnhandProduct)

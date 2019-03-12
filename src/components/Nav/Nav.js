@@ -79,8 +79,6 @@ class Nav extends Component{
 
 
     render(){
-        console.log('@nav111',this.state)
-        // const {anchorEl} = this.state
             if(this.props.location.pathname !== '/'){
                 return(
                     <div>
@@ -94,8 +92,6 @@ class Nav extends Component{
                                     inv.
                                 </Typography>
                                 <Button color='inherit' 
-                                // aria-owns={anchorEl ? 'menu' : undefined}
-                                // aria-haspopup="true"
                                 onClick={()=>this.handleRightSlide(true)}>
                                         <MenuIcon style={{fontSize:'38'}}/>
                                 </Button>                                
