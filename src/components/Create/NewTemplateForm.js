@@ -15,10 +15,13 @@ class newTemplateForm extends Component{
         this.state={
             name:``,
             materials:[],
-            selectedMaterial:``,
-            selectedMaterialUOM:``,
-            additionalMaterialCount:1,
-            templateMaterials:[]
+            productName:``,
+            templateMaterials:[
+                {
+                  name:``,
+                  qty:``  
+                }
+            ]
         }
     }
 
@@ -33,18 +36,36 @@ class newTemplateForm extends Component{
         })})
     }
 
-    handleSelectMaterialChange=(e)=>{
-        console.log({e})
+    handleProductNameInput=(val)=>{
         this.setState({
-            selectedMaterial:e.target.value
+            productName:val
         })
-        
+    }
+
+    handleSelectMaterialChange=(e,index)=>{
+        console.log({e})
+        const tempMatsCopy = [...this.state.templateMaterials]
+        tempMatsCopy[index] = {...tempMatsCopy[index], name:e.target.value}
+        this.setState({
+            templateMaterials:tempMatsCopy
+        })
+
     }
 
     handleAddMaterial=()=>{
+        const objBuilder = {
+            name:'',
+            qty:''
+        }
+        const stateCopy = this.state.templateMaterials.map(obj => ({...obj}))
+        console.log(stateCopy)
+        const addBlank = [...stateCopy, {...objBuilder}]
+        console.log({addBlank})
         this.setState({
-            additionalMaterialCount:(this.state.additionalMaterialCount+1)
+            templateMaterials:addBlank
         })
+        
+        
     }
 
     handleRemoveMaterial=()=>{
@@ -58,29 +79,30 @@ class newTemplateForm extends Component{
 
 
     handleAdditionalMaterials=()=>{
-        if(this.state.additionalMaterialCount > 0){
+        
             let mappedMaterials = this.state.materials.map(material => {
                 const {id, name, uom} = material
                 return(
                     <MenuItem key={id} style={{width:100}} value={name}>{(name).toUpperCase()} / {uom}</MenuItem>
                 )
             })
-            for(let i = 0;i<=this.state.additionalMaterialCount;i++){
-                console.log('hit loop')
+            let mappedTemplateMaterials = this.state.templateMaterials.map((material,i) => {
+                console.log('hit map')
                 return(
-                    <>
+                    <div key={i}>
                         <FormControl style={{width:'100%', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                             <InputLabel>Material</InputLabel>
                             <Select  style={{width:'50%'}}
-                            onChange={this.handleSelectMaterialChange} value={this.state.selectedMaterial}>
+                            onChange={(e)=>this.handleSelectMaterialChange(e,i)} value={this.state.templateMaterials[i].name}>
                                 {mappedMaterials}
                             </Select>
                             <TextField margin='normal' label='Qty' style={{width:'20%'}}/>
                         </FormControl>
-                    </>
+                    </div>
                 )
-            }
-        }
+            })
+            return mappedTemplateMaterials
+        
     }
 
     render(){
@@ -90,7 +112,7 @@ class newTemplateForm extends Component{
         return(
             <div>
                 <form style={{width:'80vw'}}>
-                    <TextField margin='normal' label='Product Name' style={{width:'50%'}}/><br/>
+                    <TextField margin='normal' label='Product Name' style={{width:'50%'}} onChange={(e)=>this.handleProductNameInput(e.target.value)}/><br/>
                         {additionalMaterials}
                 </form>
                 Add or Remove Materials
