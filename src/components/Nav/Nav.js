@@ -7,31 +7,44 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import MenuIcon from '@material-ui/icons/Menu'
-import MenuLink from '@material-ui/core/Link'
+import Drawer from '@material-ui/core/Drawer'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import InsertChartOutlined from '@material-ui/icons/InsertChartOutlined'
+import Extension from '@material-ui/icons/ExtensionOutlined'
+import Build from '@material-ui/icons/Build'
+import Widgets from '@material-ui/icons/Widgets'
+
 
 class Nav extends Component{
     constructor(props){
         super(props)
         this.state={
-            anchorEl:null
+            anchorEl:null,
+            rightSlide:false
         }
 
         this.handleLogout=this.handleLogout.bind(this)
     }
 
-    handleMenuClick = (e) => {
-        this.setState({
-            anchorEl:e.currentTarget
-        })
-    }
+    // handleMenuClick = (e) => {
+    //     this.setState({
+    //         anchorEl:e.currentTarget
+    //     })
+    // }
 
-    handleMenuClose = () =>{
-        this.setState({
-            anchorEl:null
-        })
+    // handleMenuClose = () =>{
+    //     this.setState({
+    //         anchorEl:null
+    //     })
+    // }
+
+    handleRightSlide=(open)=>{
+       this.setState({
+           rightSlide:open
+       }) 
     }
 
     handleLogout (){
@@ -66,8 +79,8 @@ class Nav extends Component{
 
 
     render(){
-        // console.log('@nav111',this.props.location.pathname)
-        const {anchorEl} = this.state
+        console.log('@nav111',this.state)
+        // const {anchorEl} = this.state
             if(this.props.location.pathname !== '/'){
                 return(
                     <div>
@@ -78,31 +91,42 @@ class Nav extends Component{
                                     <Button color='inherit' onClick={this.handleLogout}>LOGOUT</Button>
                                 </Typography>
                                 <Typography variant='h1' color='inherit'>
-                                    inv
+                                    inv.
                                 </Typography>
                                 <Button color='inherit' 
-                                aria-owns={anchorEl ? 'menu' : undefined}
-                                aria-haspopup="true"
-                                onClick={this.handleMenuClick}>
+                                // aria-owns={anchorEl ? 'menu' : undefined}
+                                // aria-haspopup="true"
+                                onClick={()=>this.handleRightSlide(true)}>
                                         <MenuIcon style={{fontSize:'38'}}/>
-                                </Button>
-                                <Menu
-                                id='menu' anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
-                                onClose={this.handleMenuClose}>
-                                    <MenuItem onClick={this.handleMenuClose}>
-                                            <MenuLink component={Link} to='/overview'>OVERVIEW</MenuLink>
-                                    </MenuItem>
-                                    <MenuItem onClick={this.handleMenuClose}>
-                                        <MenuLink component={Link} to='/products'>PRODUCTS</MenuLink>
-                                    </MenuItem>
-                                    <MenuItem onClick={this.handleMenuClose}>
-                                        <MenuLink component={Link} to='/materials'>MATERIALS</MenuLink>
-                                    </MenuItem>
-                                    <MenuItem onClick={this.handleMenuClose}>
-                                        <MenuLink component={Link} to='/create'>CREATE</MenuLink>
-                                    </MenuItem>
-                                </Menu>
+                                </Button>                                
+                                <Drawer anchor='right' open={this.state.rightSlide} onClose={()=>this.handleRightSlide(false)}>
+                                <div
+                                    tabIndex={0}
+                                    role="button"
+                                    onClick={()=>this.handleRightSlide(false)}
+                                    onKeyDown={()=>this.handleRightSlide(false)}
+                                    >
+                                <List>
+                                    <ListItem button key='Overview' component={Link} to='/overview'> 
+                                        <InsertChartOutlined/>
+                                        <ListItemText primary='Overview'/>
+                                    </ListItem>
+                                    <ListItem button key='Products' component={Link} to='/products'> 
+                                        <Widgets/>
+                                        <ListItemText primary='Products'/>
+                                    </ListItem>
+                                    <ListItem button key='Materials' component={Link} to='/materials'> 
+                                        <Extension/>
+                                        <ListItemText primary='Materials'/>
+                                    </ListItem>
+                                    <ListItem button key='Create' component={Link} to='/create'> 
+                                        <Build/>
+                                        <ListItemText primary='Create'/>
+                                    </ListItem>
+                                </List> 
+                                </div>
+                                </Drawer>
+                               
                             </Toolbar>
                         </AppBar>
                         

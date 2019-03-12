@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import Dropdown from 'react-dropdown'
 import Axios from 'axios';
 import NewTemplateForm from './NewTemplateForm'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 
 
 class Create extends Component{
@@ -101,13 +103,18 @@ class Create extends Component{
     handleFormDisplay=()=>{
         if(this.state.dropdown === "MATERIALS"){
             return(
-                <div>
-                    <input onChange={(e)=>this.handleUserInput('mName',e.target.value)} placeholder="Material Name"></input><br/>
-                    <input onChange={(e)=>this.handleUserInput('mOnHand',e.target.value)} placeholder="Onhand"></input><br/>
-                    <input onChange={(e)=>this.handleUserInput('mOrderPoint',e.target.value)} placeholder="Order Point"></input><br/>
-                    <input onChange={(e)=>this.handleUserInput('mCost',e.target.value)} placeholder="Cost"></input><br/>
-                    <input onChange={(e)=>this.handleUserInput('mUOM',e.target.value)} placeholder="Unit of Measurement"></input><br/>
-                    <button onClick={this.handleCreateMaterial}>CREATE</button>
+                <div style={{width:'80vw'}}>
+                    <TextField onChange={(e)=>this.handleUserInput('mName',e.target.value)} 
+                    margin='normal' label='Material Name' style={{width:'50%'}}/><br/>
+                    <TextField onChange={(e)=>this.handleUserInput('mOnHand',e.target.value)} 
+                    margin='normal' label='OnHand' style={{width:'50%'}}/><br/>
+                    <TextField onChange={(e)=>this.handleUserInput('mOrderPoint',e.target.value)} 
+                    margin='normal' label='Order Point' style={{width:'50%'}}/><br/>
+                    <TextField onChange={(e)=>this.handleUserInput('mCost',e.target.value)} 
+                    margin='normal' label='Cost' style={{width:'50%'}}/><br/>
+                    <TextField onChange={(e)=>this.handleUserInput('mUOM',e.target.value)} 
+                    margin='normal' label='Unit of Measurement' style={{width:'50%'}}/><br/>
+                    <Button onClick={this.handleCreateMaterial} variant='contained'>Create</Button>
                 </div>
             )
         }else if(this.state.dropdown === "PRODUCTS"){

@@ -2,7 +2,10 @@ import React, {Component} from 'react'
 import Axios from 'axios';
 import {connect} from 'react-redux'
 import {updateUser} from '../../dux/reducer'
-
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 
 class Login extends Component{
     constructor(props){
@@ -65,12 +68,15 @@ class Login extends Component{
 
     render(){
         return(
-            <div>
-                   <h1>LOGO</h1><br/>
-                   <input placeholder='Email' onChange={(e)=>this.handleUserInput('email',e.target.value)}/> <br/>
-                   <input placeholder='Password' onChange={(e)=>this.handleUserInput('password',e.target.value)} type='password'/><br/>
-                   <button onClick={this.handleLogin}>Login</button>
-                   <button onClick={this.handleRegister}>Register</button>
+            <div style={{display:'flex', justifyContent:'center', backgroundColor:'#252525', width:'100%', height:'100vh'}}>
+                <Paper elevation={1} style={{width:'80vw',height:'60vh', display:'flex', flexDirection:'column', 
+                alignItems:'center', marginTop:50}}>
+                   <Typography component='h1' variant='h1'>inv.</Typography><br/>
+                   <TextField label='Email' onChange={(e)=>this.handleUserInput('email',e.target.value)}/> <br/>
+                   <TextField label='Password' onChange={(e)=>this.handleUserInput('password',e.target.value)} type='password'/><br/>
+                   <Button variant='contained' onClick={this.handleLogin}>Login</Button><br/>
+                   <Button variant='contained' onClick={this.handleRegister}>Register</Button>
+                </Paper>
             </div>
         )
     }
