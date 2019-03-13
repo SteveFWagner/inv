@@ -51,18 +51,12 @@ module.exports={
                                 res.sendStatus(200)
                             }
                         }).catch(err => console.log(err))
-                    }
-                    // materials.forEach(mat => {
-                    //     const {product_id, id, qty} = mat
-                    //     db.api.create_template(product_id, id, qty)
-                    //     .catch(err => console.log(err))
-                    // })   
+                    } 
                 }).catch(err => console.log(err))
             }
         })
     },
     createMaterial: (req,res) =>{
-        //adding in a new material to inventory -- check name against current materials and stop the add if it already exists
         const db = req.app.get('db')
         const {name, uom, cost_per_uom, on_hand, order_point} = req.body
         db.api.check_materials(name)

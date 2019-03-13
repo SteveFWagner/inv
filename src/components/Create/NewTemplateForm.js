@@ -88,7 +88,6 @@ class newTemplateForm extends Component{
                 )
             })
             let mappedTemplateMaterials = this.state.templateMaterials.map((material,i) => {
-                console.log('hit map')
                 return(
                     <div key={i}>
                         <FormControl style={{width:'100%', display:'flex', flexDirection:'row', justifyContent:'space-between'}}>

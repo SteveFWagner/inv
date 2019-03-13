@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
-import Dropdown from 'react-dropdown'
 import Axios from 'axios';
 import NewTemplateForm from './NewTemplateForm'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
 
 
 class Create extends Component{
@@ -36,9 +39,9 @@ class Create extends Component{
 
     }
 
-    handleDropdown(prop,e){
+    handleDropdown=(prop,e)=>{
         this.setState({
-            [prop]:e.value
+            [prop]:e.target.value
         })
     }
 
@@ -49,7 +52,6 @@ class Create extends Component{
     }
 
     handleCreateMaterial=()=>{
-        //axios POST with mState values
         console.log('hit')
         const {mName:name, mUOM:uom, mCost:cost_per_uom, mOnHand:on_hand, mOrderPoint:order_point} = this.state
         Axios.post('/api/create/material',{name, uom, cost_per_uom, on_hand, order_point})
@@ -62,7 +64,7 @@ class Create extends Component{
     }
 
     handleProductDisplay=()=>{
-        if(this.state.selectedTemplate === 'NEW PRODUCT'){
+        if(this.state.selectedTemplate === 'New Product'){
             return(
                 <>
                     <NewTemplateForm/>
@@ -72,7 +74,7 @@ class Create extends Component{
             let productDetails = []
             let productDetails2 = {}
             this.state.productTemplates.forEach(product => {
-                if(product.name.toUpperCase() === this.state.selectedTemplate){
+                if(product.name === this.state.selectedTemplate){
                     productDetails.push(product)
                     const {id, name, on_hand} = product
                     productDetails2 = {id, name, on_hand}
@@ -82,26 +84,26 @@ class Create extends Component{
             let materialsUsed = productDetails.map(product => {
                 return(
                     <div key={product.material_id}>
-                        <li>{(product.material_name).toUpperCase()}: {product.qty}</li>
+                        <TextField style={{marginLeft:'5%'}} value={`${product.material_name}: ${product.qty}`}/>
                     </div>
                 )
             })
             return(
-                <>
-                SELECTED TEMPLATE
-                <h3>NAME: {(productDetails2.name).toUpperCase()}</h3>
-                <p>ITEM: {productDetails2.id}</p>
-                <p>ONHAND: {productDetails2.on_hand}</p>
-                <p>MATERIALS NEEDED:</p>
+                <form style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                <TextField margin='normal' label='Product Name' style={{width:'50%'}} value={(productDetails2.name)}/>
+                <TextField margin='normal' label='Item Number ' style={{width:'50%'}} value={(productDetails2.id)}/>
+                <TextField margin='normal' label='On Hand' style={{width:'50%'}} value={(productDetails2.on_hand)}/>
+                <TextField margin='normal' style={{width:'50%'}} value="Materials Needed"/>
                 {materialsUsed}
-                <button>CREATE!</button>
-                </>
+                <Button variant='contained' style={{marginTop:5}}>Create</Button>
+                {/* finish button onClick */}
+                </form>
             )
         }
     }
 
     handleFormDisplay=()=>{
-        if(this.state.dropdown === "MATERIALS"){
+        if(this.state.dropdown === "Materials"){
             return(
                 <div style={{width:'80vw'}}>
                     <TextField onChange={(e)=>this.handleUserInput('mName',e.target.value)} 
@@ -117,22 +119,31 @@ class Create extends Component{
                     <Button onClick={this.handleCreateMaterial} variant='contained'>Create</Button>
                 </div>
             )
-        }else if(this.state.dropdown === "PRODUCTS"){
-            let productDropdown = ['NEW PRODUCT'] //get the templates from db
+        }else if(this.state.dropdown === "Products"){
             let productNames = []
             this.state.productTemplates.forEach(product =>{
-                productNames.push(product.name.toUpperCase())
+                productNames.push(product.name)
             })
-            productDropdown = [...productDropdown, ...new Set(productNames)]
+            const productDropdown = [...new Set(productNames)]
+            let count = 0
+            let productDropdownDisplay = productDropdown.map(product =>{
+                console.log(product)
+                count ++
+                return(
+                    <MenuItem key={count} value={product}>{product}</MenuItem>
+                )
+            })
             let productDisplay = this.handleProductDisplay()
             return(
                 <div>
-
-                    <div style={{border:'2px black solid', display:'flex', justifyContent:'space-between', padding:'5px'}}>
-                    <Dropdown options={productDropdown} onChange={(e)=>this.handleDropdown('selectedTemplate',e)} 
-                    placeholder="SELECT A PRODUCT TO CREATE" value={this.state.selectedTemplate} />
-                    <p style={{margin:'0'}}>▼</p>
-                    </div>
+                    <FormControl style={{width:'100%'}}>
+                    <InputLabel>Select A Product To Create</InputLabel>
+                    <Select style={{width:'100%'}}  value={this.state.selectedTemplate} 
+                    onChange={(e)=>this.handleDropdown('selectedTemplate',e)}>
+                        <MenuItem style={{width:100}} value='New Product'>New Product</MenuItem>
+                        {productDropdownDisplay}
+                    </Select>
+                    </FormControl>
                     {productDisplay}
                 </div>
             )
@@ -142,18 +153,23 @@ class Create extends Component{
     }
     
     render(){
-        // console.log('State @ Create',this.state)
-        const options = ['MATERIALS', 'PRODUCTS']
+        console.log('State @ Create',this.state)
         let form = this.handleFormDisplay()
 
         return(
             <div style={{display:'flex', justifyContent:'space-around'}}>
                 <div>
                     <h1>CREATE</h1>
-                    <div style={{border:'2px black solid', display:'flex', justifyContent:'space-between', padding:'5px'}}>
-                    <Dropdown options={options} onChange={(e)=>this.handleDropdown('dropdown',e)} placeholder="SELECT AN OPTION" value={this.state.dropdown} />
-                    <p style={{margin:'0'}}>▼</p>
-                    </div>
+                    <form style={{width:'80vw'}}>
+                    <FormControl style={{width:'100%'}}>
+                    <InputLabel>Select An Option</InputLabel>
+                    <Select style={{width:'100%'}} value={this.state.dropdown} 
+                    onChange={(e)=>this.handleDropdown('dropdown',e)}>
+                        <MenuItem style={{width:100}} value='Materials'>Materials</MenuItem>
+                        <MenuItem style={{width:100}} value='Products'>Products</MenuItem>
+                    </Select>
+                    </FormControl>
+                    </form>
                     {form}
                 </div>
             </div>
