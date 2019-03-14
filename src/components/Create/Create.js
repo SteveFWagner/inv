@@ -7,6 +7,7 @@ import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
+import Typography from '@material-ui/core/Typography'
 
 
 class Create extends Component{
@@ -21,7 +22,8 @@ class Create extends Component{
             mOrderPoint:0,
             mCost:0,
             mUOM:``,
-            selectedTemplate:``
+            selectedTemplate:``,
+            qtyToProduce:1
         }
     }
 
@@ -59,8 +61,21 @@ class Create extends Component{
             const {name, id} = res.data[0]
             console.log(res)
             alert(`Success! ${name} created with ITEM#:00${id}`)
+            this.setState({
+                dropdown:''
+            })
         })
         .catch(err => alert('This Material Already Exists.'))
+    }
+
+    handleCreateProduct=(materials)=>{
+        const {qtyToProduce} = this.state
+        const productId = materials[0].id
+        console.log('Check this:', materials, qtyToProduce, {productId})
+        Axios.put(`/api/create/products/${productId}`,{materials, qtyToProduce})
+        .then(res => {
+            this.getTemplates()
+        })
     }
 
     handleProductDisplay=()=>{
@@ -82,21 +97,26 @@ class Create extends Component{
                 }
             })
             let materialsUsed = productDetails.map(product => {
+                // console.log({product})
                 return(
                     <div key={product.material_id}>
-                        <TextField style={{marginLeft:'5%'}} value={`${product.material_name}: ${product.qty}`}/>
+                        <TextField style={{marginLeft:'5%'}} value={`${product.material_name}: ${product.qty}/${product.uom}`}/>
                     </div>
                 )
             })
             return(
                 <form style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                <TextField margin='normal' label='Product Name' style={{width:'50%'}} value={(productDetails2.name)}/>
-                <TextField margin='normal' label='Item Number ' style={{width:'50%'}} value={(productDetails2.id)}/>
-                <TextField margin='normal' label='On Hand' style={{width:'50%'}} value={(productDetails2.on_hand)}/>
-                <TextField margin='normal' style={{width:'50%'}} value="Materials Needed"/>
-                {materialsUsed}
-                <Button variant='contained' style={{marginTop:5}}>Create</Button>
-                {/* finish button onClick */}
+                    <TextField margin='normal' label='Product Name' style={{width:'50%'}} value={(productDetails2.name)}/>
+                    <TextField margin='normal' label='Item Number ' style={{width:'50%'}} value={(productDetails2.id)}/>
+                    <TextField margin='normal' label='On Hand' style={{width:'50%'}} value={(productDetails2.on_hand)}/>
+                    <TextField margin='normal' style={{width:'50%'}} value="Materials Needed"/>
+                        {materialsUsed}
+                    <TextField margin='normal' label='Quantity to Produce' style={{width:'50%'}} type='number'
+                    defaultValue={1} onChange={(e)=>this.handleUserInput('qtyToProduce',e.target.value)}/>
+                    <Button variant='contained' style={{marginTop:5}} 
+                    onClick={()=>this.handleCreateProduct(productDetails)}>
+                        Create
+                    </Button>
                 </form>
             )
         }
@@ -105,17 +125,17 @@ class Create extends Component{
     handleFormDisplay=()=>{
         if(this.state.dropdown === "Materials"){
             return(
-                <div style={{width:'80vw'}}>
+                <div style={{width:'80vw', display:'flex', flexDirection:'column', alignItems:'center'}}>
                     <TextField onChange={(e)=>this.handleUserInput('mName',e.target.value)} 
-                    margin='normal' label='Material Name' style={{width:'50%'}}/><br/>
+                    margin='normal' label='Material Name' style={{width:'50%'}}/>
                     <TextField onChange={(e)=>this.handleUserInput('mOnHand',e.target.value)} 
-                    margin='normal' label='OnHand' style={{width:'50%'}}/><br/>
+                    margin='normal' label='OnHand' style={{width:'50%'}}/>
                     <TextField onChange={(e)=>this.handleUserInput('mOrderPoint',e.target.value)} 
-                    margin='normal' label='Order Point' style={{width:'50%'}}/><br/>
+                    margin='normal' label='Order Point' style={{width:'50%'}}/>
                     <TextField onChange={(e)=>this.handleUserInput('mCost',e.target.value)} 
-                    margin='normal' label='Cost' style={{width:'50%'}}/><br/>
+                    margin='normal' label='Cost' style={{width:'50%'}}/>
                     <TextField onChange={(e)=>this.handleUserInput('mUOM',e.target.value)} 
-                    margin='normal' label='Unit of Measurement' style={{width:'50%'}}/><br/>
+                    margin='normal' label='Unit of Measurement' style={{width:'50%'}}/>
                     <Button onClick={this.handleCreateMaterial} variant='contained'>Create</Button>
                 </div>
             )
@@ -127,7 +147,6 @@ class Create extends Component{
             const productDropdown = [...new Set(productNames)]
             let count = 0
             let productDropdownDisplay = productDropdown.map(product =>{
-                console.log(product)
                 count ++
                 return(
                     <MenuItem key={count} value={product}>{product}</MenuItem>
@@ -153,13 +172,13 @@ class Create extends Component{
     }
     
     render(){
-        console.log('State @ Create',this.state)
+        // console.log('State @ Create',this.state)
         let form = this.handleFormDisplay()
 
         return(
             <div style={{display:'flex', justifyContent:'space-around'}}>
                 <div>
-                    <h1>CREATE</h1>
+                    <Typography variant='h3'>Create.</Typography>
                     <form style={{width:'80vw'}}>
                     <FormControl style={{width:'100%'}}>
                     <InputLabel>Select An Option</InputLabel>

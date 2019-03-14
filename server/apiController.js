@@ -79,6 +79,22 @@ module.exports={
         })
 
     },
+    createProducts: (req,res) =>{
+        //Note for later: account for negative material onhands
+        const db = req.app.get('db')
+        const {id:productId} = req.params
+        const {materials, qtyToProduce} = req.body
+        Promise.all([
+            db.api.update_onhand_product(qtyToProduce, productId),
+            materials.forEach(material =>{
+                const qty = material.qty*qtyToProduce
+                const id = material.material_id
+                db.api.update_onhand_material(qty, id)
+            })])
+        .then(
+            res.status(200).send(`Inventory updated for Product ${productId} and required materials.`)
+        )
+    },
     updateOnhandMaterial: (req,res) =>{
         
     },

@@ -71,7 +71,6 @@ class Nav extends Component{
                 this.props.updateUser(res.data)
                 // console.log(res.data)
             }catch(err){
-                console.log(111111, err)
                 this.props.history.push('/') //redirect
             }
         }

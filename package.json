@@ -12,6 +12,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "massive": "^5.7.7",
+    "mui-datatables": "^2.0.0-beta.58",
     "pg": "^7.8.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",

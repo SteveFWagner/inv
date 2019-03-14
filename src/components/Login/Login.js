@@ -33,7 +33,7 @@ class Login extends Component{
                     this.props.history.push('/overview')
                 }
             })
-            .catch(err => console.log('no user in dux or sess',err))
+            .catch(err => console.log(err))
         }else if (id > 0){
             this.props.history.push('/overview')
         }
