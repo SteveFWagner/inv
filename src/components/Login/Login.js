@@ -3,9 +3,10 @@ import Axios from 'axios';
 import {connect} from 'react-redux'
 import {updateUser} from '../../dux/reducer'
 import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import Logo from '../../images/Logo.png'
+
 
 class Login extends Component{
     constructor(props){
@@ -71,7 +72,9 @@ class Login extends Component{
             <div style={{display:'flex', justifyContent:'center', backgroundColor:'#252525', width:'100%', height:'100vh'}}>
                 <Paper elevation={1} style={{width:'80vw',height:'60vh', display:'flex', flexDirection:'column', 
                 alignItems:'center', marginTop:50}}>
-                   <Typography component='h1' variant='h1'>inv.</Typography><br/>
+                   <div style={{background:'#1EABFF', width:'100%', borderRadius:3, display:'flex', justifyContent:'center'}}>
+                        <img src={Logo} alt='inv' style={{width:'40vw', height:'auto'}}/>
+                   </div>
                    <TextField label='Email' onChange={(e)=>this.handleUserInput('email',e.target.value)}/> <br/>
                    <TextField label='Password' onChange={(e)=>this.handleUserInput('password',e.target.value)} type='password'/><br/>
                    <Button variant='contained' onClick={this.handleLogin}>Login</Button><br/>

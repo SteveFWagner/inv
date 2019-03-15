@@ -16,6 +16,7 @@ import InsertChartOutlined from '@material-ui/icons/InsertChartOutlined'
 import Extension from '@material-ui/icons/ExtensionOutlined'
 import Build from '@material-ui/icons/Build'
 import Widgets from '@material-ui/icons/Widgets'
+import Logo from '../../images/Logo.png'
 
 
 class Nav extends Component{
@@ -28,18 +29,6 @@ class Nav extends Component{
 
         this.handleLogout=this.handleLogout.bind(this)
     }
-
-    // handleMenuClick = (e) => {
-    //     this.setState({
-    //         anchorEl:e.currentTarget
-    //     })
-    // }
-
-    // handleMenuClose = () =>{
-    //     this.setState({
-    //         anchorEl:null
-    //     })
-    // }
 
     handleRightSlide=(open)=>{
        this.setState({
@@ -87,9 +76,7 @@ class Nav extends Component{
                                     {this.props.email}
                                     <Button color='inherit' onClick={this.handleLogout}>LOGOUT</Button>
                                 </Typography>
-                                <Typography variant='h1' color='inherit'>
-                                    inv.
-                                </Typography>
+                                <img src={Logo} alt='inv' style={{width:'30vw', height:'auto'}}/>
                                 <Button color='inherit' 
                                 onClick={()=>this.handleRightSlide(true)}>
                                         <MenuIcon style={{fontSize:'38'}}/>

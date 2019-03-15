@@ -23,6 +23,30 @@ module.exports={
         .then(resp => {res.status(200).send(resp)})
         .catch(err => console.log(err))
     },
+    getMaterialsTotalCost: (req,res) =>{
+        const db = req.app.get('db')
+        db.api.get_materials_total_cost()
+        .then(resp => {res.status(200).send(resp)})
+        .catch(err => console.log(err))
+    },
+    getMaterialsUniqueCount: (req,res) =>{
+        const db = req.app.get('db')
+        db.api.get_materials_unique_count()
+        .then(resp => {res.status(200).send(resp)})
+        .catch(err => console.log(err))
+    },
+    getProductsTotalCost: (req,res) =>{
+        const db = req.app.get('db')
+        db.api.get_products_total_cost()
+        .then(resp => {res.status(200).send(resp)})
+        .catch(err => console.log(err))
+    },
+    getProductsUniqueCount: (req,res) =>{
+        const db = req.app.get('db')
+        db.api.get_products_unique_count()
+        .then(resp => {res.status(200).send(resp)})
+        .catch(err => console.log(err))
+    },
     createTemplate: (req,res) =>{
         const db = req.app.get('db')
         const {productName, addMatIds} = req.body
@@ -85,21 +109,41 @@ module.exports={
         const {id:productId} = req.params
         const {materials, qtyToProduce} = req.body
         Promise.all([
-            db.api.update_onhand_product(qtyToProduce, productId),
+            db.api.update_onhand_product_for_create(qtyToProduce, productId),
             materials.forEach(material =>{
                 const qty = material.qty*qtyToProduce
                 const id = material.material_id
-                db.api.update_onhand_material(qty, id)
+                db.api.update_onhand_material_for_create(qty, id)
             })])
         .then(
             res.status(200).send(`Inventory updated for Product ${productId} and required materials.`)
         )
     },
     updateOnhandMaterial: (req,res) =>{
-        
+        const db = req.app.get('db')
+        const {id} = req.params
+        const {onHand:on_hand, orderPoint:order_point, cost:cost_per_uom, unit:uom} = req.body
+        console.log({id},{on_hand}, {order_point}, {cost_per_uom}, {uom} )
+        db.api.update_onhand_material(id, on_hand, order_point, cost_per_uom, uom)
+        .then(resp => {
+            res.status(200).send(resp)
+        }).catch(err => {
+            console.log(err)
+            res.sendStatus(500)
+        })
     },
     updateOnhandProduct: (req,res) =>{
-        
+        const db = req.app.get('db')
+        const {id} = req.params
+        const {onHand:on_hand} = req.body
+        console.log({id},{on_hand})
+        db.api.update_onhand_product(id, on_hand)
+        .then(resp => {
+            res.status(200).send(resp)
+        }).catch(err => {
+            console.log(err)
+            res.sendStatus(500)
+        }) 
     },
     deleteMaterial: (req,res) =>{
         

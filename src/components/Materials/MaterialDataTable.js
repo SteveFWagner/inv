@@ -9,9 +9,9 @@ export default class MaterialDataTable extends Component{
         super(props)
         this.state={
             materials:[],
-            modal:false
+            modal:false,
+            modalData:[]
         }
-        this.handleModalOpen=this.handleModalOpen.bind(this)   
     }
         
         componentDidMount(){
@@ -27,8 +27,11 @@ export default class MaterialDataTable extends Component{
             })
         }
 
-        handleModalOpen = () => {
-            this.setState({ modal: true })
+        handleModalOpen = (rowData) => {
+            this.setState({ 
+                modal: true,
+                modalData: rowData 
+            })
         }
         
         handleModalClose = () => {
@@ -36,7 +39,7 @@ export default class MaterialDataTable extends Component{
         }
 
     render(){
-        console.log(this.state)
+        // console.log(this.state)
         const columns = [
             {name: "name", label: "Name", options: { filter: true, sort: true,}},
             {name: "id", label: "Item Number", options: { filter: true, sort: false,}},
@@ -48,17 +51,19 @@ export default class MaterialDataTable extends Component{
         ]
         const options = {
             filterType: 'dropdown',
-            onRowsSelect: function(currentRowsSelected, allRowsSelected){
-                console.log({currentRowsSelected})
-                console.log({allRowsSelected})
-            },
-            onRowsDelete: function (rowsDeleted){
+            onRowsDelete:(rowsDeleted)=>{
                 console.log(rowsDeleted)
+                alert(
+                    `
+                    You cannot delete Materials due to dependancies.
+
+                    Please update the onhand as needed.` 
+                )
                 
             },
-            onRowClick:function(rowData, rowMeta){
+            onRowClick: (rowData, rowMeta)=>{
                 console.log({rowData},{rowMeta})
-                // this.handleModalOpen()
+                this.handleModalOpen(rowData)
             }
         }
         
@@ -69,9 +74,8 @@ export default class MaterialDataTable extends Component{
             columns={columns}
             options={options}
             />
-            <button onClick={this.handleModalOpen}>Click Me!</button>
-            <Modal open={this.state.modal} close={this.handleModalClose}>
-                <MaterialModal closeModal={this.handleModalClose}/>
+            <Modal open={this.state.modal}>
+                <MaterialModal closeModal={this.handleModalClose} rowData={this.state.modalData} refresh={this.getMaterials}/>
             </Modal>
             </>
         )
