@@ -70,10 +70,10 @@ class Login extends Component{
     render(){
         return(
             <div style={{display:'flex', justifyContent:'center', backgroundColor:'#252525', width:'100%', height:'100vh'}}>
-                <Paper elevation={1} style={{width:'80vw',height:'60vh', display:'flex', flexDirection:'column', 
+                <Paper elevation={1} style={{width:'80vw',height:'65vh', display:'flex', flexDirection:'column', 
                 alignItems:'center', marginTop:50}}>
                    <div style={{background:'#1EABFF', width:'100%', borderRadius:3, display:'flex', justifyContent:'center'}}>
-                        <img src={Logo} alt='inv' style={{width:'40vw', height:'auto'}}/>
+                        <img src={Logo} alt='inv' style={{height: '15vh', width:'auto'}}/>
                    </div>
                    <TextField label='Email' onChange={(e)=>this.handleUserInput('email',e.target.value)}/> <br/>
                    <TextField label='Password' onChange={(e)=>this.handleUserInput('password',e.target.value)} type='password'/><br/>

@@ -76,7 +76,7 @@ class Nav extends Component{
                                     {this.props.email}
                                     <Button color='inherit' onClick={this.handleLogout}>LOGOUT</Button>
                                 </Typography>
-                                <img src={Logo} alt='inv' style={{width:'30vw', height:'auto'}}/>
+                                <img src={Logo} alt='inv' style={{height:'10vh', width:'auto'}}/>
                                 <Button color='inherit' 
                                 onClick={()=>this.handleRightSlide(true)}>
                                         <MenuIcon style={{fontSize:'38'}}/>

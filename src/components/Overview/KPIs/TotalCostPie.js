@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
 import {Pie} from 'react-chartjs-2'
 
 const data = {
@@ -34,13 +37,17 @@ export default class TotalCostPie extends Component{
 
     render(){
         return(
-            <div>
-                <Paper style={{width:150, height:150}}>
-                <Pie data={data}/>}
-                </Paper>
-            </div>
-        )
-    }
+                <Card>
+					<CardContent>
+						<CardHeader>
+							Header
+						</CardHeader>
+						<Pie data={data}/>
+					</CardContent>
+				</Card>
+		)
+	}
+	
 }
 
 

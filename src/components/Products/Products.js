@@ -42,7 +42,7 @@ class Products extends Component{
                     <Typography variant='h6'>TOTAL COST ONHAND: ${Number(this.state.totCostOH).toLocaleString()}</Typography>
                     <Typography variant='h6'>UNIQUE PRODUCTS: {Number(this.state.uniqueMats).toLocaleString()}</Typography>
                 </div>
-                <ProductDataTable/>
+                <ProductDataTable refreshInfo={this.getInfo}/>
             </div>
         )
     }

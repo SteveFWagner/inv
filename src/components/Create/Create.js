@@ -60,7 +60,7 @@ class Create extends Component{
         .then(res => {
             const {name, id} = res.data[0]
             console.log(res)
-            alert(`Success! ${name} created with ITEM#:00${id}`)
+            alert(`Success! ${name} created with ITEM#:${id}`)
             this.setState({
                 dropdown:''
             })
@@ -76,6 +76,7 @@ class Create extends Component{
         .then(res => {
             this.getTemplates()
         })
+        .catch(err => alert('There was an error!'))
     }
 
     handleProductDisplay=()=>{

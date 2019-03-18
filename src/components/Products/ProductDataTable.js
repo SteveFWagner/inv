@@ -38,10 +38,10 @@ export default class ProductDataTable extends Component{
     }
 
     render(){
-        // console.log(this.state)
+        console.log(this.state)
         const columns = [
-            {name: "product_name", label: "Name", options: { filter: true, sort: true,}},
-            {name: "product_id", label: "Item Number", options: { filter: true, sort: false,}},
+            {name: "name", label: "Name", options: { filter: true, sort: true,}},
+            {name: "id", label: "Item Number", options: { filter: true, sort: false,}},
             {name: "on_hand", label: "On Hand", options: { filter: true, sort: false,}},
             {name: "material_cost", label: "Cost Per", options: { filter: true, sort: false,}},
             {name: "cost_on_hand", label: "Cost On Hand", options: { filter: true, sort: false,}},
@@ -49,8 +49,16 @@ export default class ProductDataTable extends Component{
         const options = {
             filterType: 'dropdown',
             onRowsDelete:(rowsDeleted)=>{
-                console.log(rowsDeleted)
-                //add delete products
+                Promise.all(
+                    rowsDeleted.data.map(toDelete => {
+                        const {id} = this.state.products[toDelete.dataIndex]
+                        return Axios.delete(`/api/delete/template/${id}`)
+                    })
+                ).then(res => {
+                    alert('Delete Successful.')
+                    this.getProducts()
+                    this.props.refreshInfo()
+                })
             },
             onRowClick: (rowData, rowMeta)=>{
                 console.log({rowData},{rowMeta})

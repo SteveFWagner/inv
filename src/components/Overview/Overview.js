@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import Axios from 'axios';
+import Typography from '@material-ui/core/Typography'
+import KPIContainer from './KPIs/KPIContainer'
 
 
 class Overview extends Component{
@@ -89,13 +91,14 @@ class Overview extends Component{
 
         return(
             <div>
-                <h1>OVERVIEW</h1>
-                <h4><input placeholder='Search by name...'/></h4>
+                <Typography variant='h3'>Overview.</Typography>
+                <div style={{height:'32vh'}}>
+                    <KPIContainer/>
+                </div>
                 <div style={{display:'flex',boxSizing:"border-box"}}>
-                    {mappedMaterials}
+                    {/* {mappedMaterials} */}
                 </div>
                 <div style={{display:'flex', justifyContent:'space-around', borderTop:'2px grey solid', marginTop:'15px'}}>
-                    <h4>DISPLAY KPIs HERE!</h4>
                     
                 </div>
             </div>

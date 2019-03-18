@@ -145,10 +145,20 @@ module.exports={
             res.sendStatus(500)
         }) 
     },
-    deleteMaterial: (req,res) =>{
-        
-    },
     deleteTemplate: (req,res) =>{
-        
+        const db = req.app.get('db')
+        const {id} = req.params
+        console.log(id)
+        db.api.delete_template(id)
+        .then(()=> db.api.delete_product(id)
+            .then((resp) => {
+                console.log('resp')
+                res.status(200).send('hit')
+            })
+            .catch(err => {
+                console.log(err)
+                res.sendStatus(500)
+            })
+        )
     }
 }

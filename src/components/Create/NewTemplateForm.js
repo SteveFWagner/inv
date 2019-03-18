@@ -120,11 +120,15 @@ class newTemplateForm extends Component{
         })
         console.log(22222,addMatIds)
         Axios.post('/api/create/template',{productName,addMatIds})
-        .then(res => console.log(res))
+        .then(res => {
+            console.log(res)
+            alert(`Success! ${productName} created.`)
+        })
+        .catch(err => alert('This Product Already Exists.'))
     }
 
     render(){
-        console.log("State @ NTF",this.state)
+        // console.log("State @ NTF",this.state)
         let additionalMaterials = this.handleAdditionalMaterials()
         
         return(

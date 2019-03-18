@@ -28,7 +28,7 @@ app.use(session({
     resave:false,
     saveUninitialized:true,
     cookie:{
-        maxAge:10000000
+        maxAge:1000000000
     }
 }))
 
@@ -62,5 +62,4 @@ massive(CONNECTION_STRING).then(db =>{
     app.put('/api/create/products/:id', ct.createProducts)
     app.put('/api/update/onhand/material/:id', ct.updateOnhandMaterial)
     app.put('/api/update/onhand/product/:id', ct.updateOnhandProduct)
-    // app.delete('/api/delete/material/:id', ct.deleteMaterial)
-    // app.delete('/api/delete/template/:id', ct.deleteTemplate)
+    app.delete('/api/delete/template/:id', ct.deleteTemplate)

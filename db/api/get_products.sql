@@ -1,10 +1,5 @@
-SELECT product_id, products.name AS product_name, (cost_per_uom*qty) as material_cost, products.on_hand, ((cost_per_uom*qty)*products.on_hand) as cost_on_hand
-FROM product_templates
-JOIN products ON products.id = product_templates.product_id
-JOIN materials ON materials.id = product_templates.material_id
-
--- SELECT SUM(cost_per_uom*qty), products.name
--- FROM product_templates
--- JOIN products ON products.id = product_templates.product_id
--- JOIN materials ON materials.id = product_templates.material_id
--- GROUP BY(products.name)
+SELECT products.id, products.name, products.on_hand, SUM(materials.cost_per_uom*qty) AS material_cost, SUM((materials.cost_per_uom*qty)*products.on_hand) AS cost_on_hand
+FROM products
+JOIN product_templates on products.id = product_templates.product_id
+JOIN materials on product_templates.material_id = materials.id
+GROUP BY products.id
