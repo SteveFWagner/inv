@@ -2,13 +2,13 @@ import React, {Component} from 'react'
 import Axios from 'axios';
 import Typography from '@material-ui/core/Typography'
 import KPIContainer from './KPIs/KPIContainer'
-
+import CardsContainer from './Cards/CardsContainer'
 
 class Overview extends Component{
     constructor(props){
         super(props)
         this.state={
-            overview:[],
+            overviewData:[],
             materials:[]
         }
     }
@@ -27,83 +27,57 @@ class Overview extends Component{
         Axios.get('/api/overview')
         .then(res => {
             this.setState({
-                overview:res.data
+                overviewData:res.data
             })
         })
     }
 
-    handleCashAdjust(num, num2 = 0){
-        let cents = num*100
-        let cents2 = num2*100
-        num = ((cents+cents2)/100).toLocaleString()
-        return num
-    }
 
-    add(num1 = 0, num2 = 0){
-        const sum = num1 + num2
-        return sum
-    }
 
 
     render(){
-        let mappedOV = this.state.overview.map((val, i, arr) => {
-            if(arr[i+1]){
-                if(val.material_id === arr[i+1].material_id){
-                    val.qty = (arr[i+1].qty + val.qty)
-                    arr.splice(arr[i+1],1)
-                    return val
-                }
-            }
-            return val
-        }).filter(val => val != null)
+        // console.log('State @ OV',this.state)
 
-        let mappedMaterials = this.state.materials
-        .map(value =>{
-            return {...value, name:value.name.toUpperCase()}
-        })
-        .map(matVal => {
-            mappedOV.forEach( ovVal => {
-                if(matVal.id === ovVal.material_id){
-                    matVal = {...matVal,...ovVal}
-                    return matVal
+        //loop over the materials array 
+            //check if any of the overview ids match the materials id
+                //if there is a match, check to see if there is an existing array on the material called "products"
+                //if no existing "products" array
+                    //add a new array to the material called "products"
+                    //"products" will contain one object per product the material is in.
+        
+        let mappedMaterials = this.state.materials.map(material => {
+            this.state.overviewData.forEach(data => {
+                if(material.id === data.id){
+                    if(!material.products){
+                        material.products = [{
+                            product_id:data.product_id,
+                            product_name:data.product_name,
+                            product_on_hand:data.product_on_hand,
+                            qty:data.qty
+                        }]
+                    }else if(material.products){
+                        material.products = [...material.products, {
+                            product_id:data.product_id,
+                            product_name:data.product_name,
+                            product_on_hand:data.product_on_hand,
+                            qty:data.qty
+                        }]
+                    }
                 }
             })
-            return matVal
+            return material
         })
-        .map(val => {
-            val.cost_per_uom = this.handleCashAdjust(val.cost_per_uom)
-            val.cost_on_hand = this.handleCashAdjust(val.cost_on_hand)
-            const {id, name, uom, cost_per_uom, on_hand, qty} = val
-            const totOnHand = this.add(on_hand, qty)
-            const costTot = cost_per_uom * totOnHand
-            return(
-                <div key={id} style={{borderRight:'2px grey solid', margin:'5px', padding:'5px'}}>
-                    <h3>{name}</h3>
-                    <h6>ITEM: 00{id}</h6>
-                    <h6>COST: ${cost_per_uom}/{uom}</h6>
-                    <h6>MATERIAL ONHAND: {on_hand}{uom}</h6>
-                    <h6>MATERIAL IN PRODUCT ONHAND: {qty}</h6>
-                    <h6>MATERIAL ONHAND TOTAL: {totOnHand.toLocaleString()}</h6>
-                    <h6>COST ON HAND: ${(costTot).toLocaleString()}</h6>
-                </div>
-            )
-        })
-
         return(
             <div>
                 <Typography variant='h3'>Overview.</Typography>
-                <div style={{height:'32vh'}}>
-                    <KPIContainer/>
-                </div>
-                <div style={{display:'flex',boxSizing:"border-box"}}>
-                    {/* {mappedMaterials} */}
-                </div>
-                <div style={{display:'flex', justifyContent:'space-around', borderTop:'2px grey solid', marginTop:'15px'}}>
-                    
-                </div>
+                <Typography variant='h5' style={{display:'flex', justifyContent:'center'}}>Key Performance Indicators.</Typography>
+                <KPIContainer/>
+                <Typography variant='h5' style={{display:'flex', justifyContent:'center', marginTop:20}}>Individual Statistics.</Typography>
+                <CardsContainer data={mappedMaterials}/>
             </div>
         )
     }
 
 }
 export default Overview
+

@@ -1,25 +1,48 @@
-import React from 'react'
-import Grid from '@material-ui/core/Grid'
+import React, {Component} from 'react'
 import TotalCostPie from './TotalCostPie'
+import Top5ProductCost from './Top5ProductCost'
+import Top5MaterialCost from './Top5MaterialCost'
 
-export default function KPIContainer(props){
-    return(
-        <div>
-            <Grid container spacing={24} style={{padding:15}}
-            direction="row" justify="space-around" alignItems="flex-start">
-                <Grid item xs={12} sm={6} lg={4} xl={3} zeroMinWidth>
-                    <TotalCostPie/>
-                </Grid>
-                <Grid item xs={12} sm={6} lg={4} xl={3} zeroMinWidth>
-                    <TotalCostPie/>
-                </Grid>
-                <Grid item xs={12} sm={6} lg={4} xl={3} zeroMinWidth>
-                    <TotalCostPie/>
-                </Grid>
-                <Grid item xs={12} sm={6} lg={4} xl={3} zeroMinWidth>
-                    <TotalCostPie/>
-                </Grid>
-            </Grid>
-        </div>
-    )
+export default class KPIContainer extends Component{
+    constructor(props) {
+        super(props);
+        this.state = { 
+            width: 0, 
+            height: 0 
+        }
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+      }
+      
+      componentDidMount() {
+        this.updateWindowDimensions()
+        window.addEventListener('resize', this.updateWindowDimensions);
+      }
+      
+      componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+      }
+      
+      updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+      }
+    render(){
+        // console.log(this.state)
+        let size = 350
+        if(this.state.width >= 0 && this.state.width <= 949){
+            size = 350
+        }else if(this.state.width >= 950){
+            size = 450
+        }
+
+        return(
+            <div style={{display:'flex',flexWrap:'nowrap', overflowX:'auto'}}>
+                <TotalCostPie size={size}/>
+                <Top5ProductCost size={size}/>
+                <Top5MaterialCost size={size}/>
+                {/* <TotalCostPie size={size}/>
+                <TotalCostPie size={size}/> */}
+                
+            </div>
+        )
+    }
 }

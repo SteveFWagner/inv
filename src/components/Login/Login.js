@@ -75,7 +75,7 @@ class Login extends Component{
                    <div style={{background:'#1EABFF', width:'100%', borderRadius:3, display:'flex', justifyContent:'center'}}>
                         <img src={Logo} alt='inv' style={{height: '15vh', width:'auto'}}/>
                    </div>
-                   <TextField label='Email' onChange={(e)=>this.handleUserInput('email',e.target.value)}/> <br/>
+                   <TextField label='Username' onChange={(e)=>this.handleUserInput('email',e.target.value)}/> <br/>
                    <TextField label='Password' onChange={(e)=>this.handleUserInput('password',e.target.value)} type='password'/><br/>
                    <Button variant='contained' onClick={this.handleLogin}>Login</Button><br/>
                    <Button variant='contained' onClick={this.handleRegister}>Register</Button>
