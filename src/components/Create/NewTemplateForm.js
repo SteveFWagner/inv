@@ -43,7 +43,6 @@ class newTemplateForm extends Component{
     }
 
     handleSelectMaterialChange=(e,index,prop)=>{
-        console.log({e})
         const tempMatsCopy = [...this.state.templateMaterials]
         tempMatsCopy[index] = {...tempMatsCopy[index], [prop]:e.target.value}
         this.setState({
@@ -68,9 +67,7 @@ class newTemplateForm extends Component{
     handleRemoveMaterial=()=>{
         if(this.state.templateMaterials.length > 1){
             const stateCopy = this.state.templateMaterials.map(obj =>({...obj}))
-            console.log({stateCopy})
             stateCopy.splice((this.state.templateMaterials.length-1),1)
-            console.log({stateCopy})
             this.setState({
                 templateMaterials:stateCopy
             })
@@ -84,7 +81,7 @@ class newTemplateForm extends Component{
             let mappedMaterials = this.state.materials.map(material => {
                 const {id, name, uom} = material
                 return(
-                    <MenuItem key={id} style={{width:100}} value={name}>{(name).toUpperCase()} / {uom}</MenuItem>
+                    <MenuItem key={id} style={{width:"100%"}} value={name}>{(name).toUpperCase()} / {uom}</MenuItem>
                 )
             })
             let mappedTemplateMaterials = this.state.templateMaterials.map((material,i) => {
@@ -108,7 +105,6 @@ class newTemplateForm extends Component{
 
     handleCreate=()=>{
         //loop through temlpateMats, assigning the correct material id to them
-        console.log(11111, this.state.templateMaterials)
         const {productName} = this.state
         const addMatIds = this.state.templateMaterials.map(material => {
             this.state.materials.forEach(mat => {
@@ -118,13 +114,15 @@ class newTemplateForm extends Component{
             })
             return material
         })
-        console.log(22222,addMatIds)
         Axios.post('/api/create/template',{productName,addMatIds})
         .then(res => {
-            console.log(res)
             alert(`Success! ${productName} created.`)
+            this.props.reset('selectedTemplate', '')
+            this.props.reset('dropdown', '')
         })
-        .catch(err => alert('This Product Already Exists.'))
+        .catch(err => {
+            console.log(err)
+            alert('This Product Already Exists.')})
     }
 
     render(){

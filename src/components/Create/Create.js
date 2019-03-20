@@ -54,12 +54,10 @@ class Create extends Component{
     }
 
     handleCreateMaterial=()=>{
-        console.log('hit')
         const {mName:name, mUOM:uom, mCost:cost_per_uom, mOnHand:on_hand, mOrderPoint:order_point} = this.state
         Axios.post('/api/create/material',{name, uom, cost_per_uom, on_hand, order_point})
         .then(res => {
             const {name, id} = res.data[0]
-            console.log(res)
             alert(`Success! ${name} created with ITEM#:${id}`)
             this.setState({
                 dropdown:''
@@ -83,7 +81,7 @@ class Create extends Component{
         if(this.state.selectedTemplate === 'New Product'){
             return(
                 <>
-                    <NewTemplateForm/>
+                    <NewTemplateForm reset={this.handleUserInput}/>
                 </>
             )
         }else if(this.state.selectedTemplate){

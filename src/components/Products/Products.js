@@ -34,7 +34,7 @@ class Products extends Component{
     }
 
     render(){
-        console.log(this.state)
+        // console.log(this.state)
         return(
             <div>
                 <Typography variant='h3'>Products.</Typography>

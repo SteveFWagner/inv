@@ -38,7 +38,7 @@ export default class ProductDataTable extends Component{
     }
 
     render(){
-        console.log(this.state)
+        // console.log(this.state)
         const columns = [
             {name: "name", label: "Name", options: { filter: true, sort: true,}},
             {name: "id", label: "Item Number", options: { filter: true, sort: false,}},
