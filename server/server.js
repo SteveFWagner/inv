@@ -1,3 +1,4 @@
+const path = require('path'); // Usually moved to the start of file
 require('dotenv').config()
 const express = require('express')
 const massive = require('massive')
@@ -18,7 +19,6 @@ const auth = require('./authController')
 const ct = require('./apiController')
 
 //hosting below
-const path = require('path'); // Usually moved to the start of file
 
 app.get('*', (req, res)=>{
     res.sendFile(path.join(__dirname, '../build/index.html'));
