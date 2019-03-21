@@ -8,7 +8,8 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Typography from '@material-ui/core/Typography'
-
+// import SnackBar from '../SnackBar/SnackBar'
+import Snackbar from '@material-ui/core/Snackbar'
 
 class Create extends Component{
     constructor(props){
@@ -23,7 +24,9 @@ class Create extends Component{
             mCost:0,
             mUOM:``,
             selectedTemplate:``,
-            qtyToProduce:1
+            qtyToProduce:1,
+            snackbar:false,
+            snackbarMessage:"Hello!"
         }
     }
 
@@ -53,15 +56,18 @@ class Create extends Component{
         })
     }
 
+
     handleCreateMaterial=()=>{
         const {mName:name, mUOM:uom, mCost:cost_per_uom, mOnHand:on_hand, mOrderPoint:order_point} = this.state
         Axios.post('/api/create/material',{name, uom, cost_per_uom, on_hand, order_point})
         .then(res => {
             const {name, id} = res.data[0]
-            alert(`Success! ${name} created with ITEM#:${id}`)
             this.setState({
+                snackbarMessage:`Success! ${name} created with ITEM#:${id}`,
+                snackbar:true,
                 dropdown:''
             })
+            
         })
         .catch(err => alert('This Material Already Exists.'))
     }
@@ -171,7 +177,7 @@ class Create extends Component{
     }
     
     render(){
-        // console.log('State @ Create',this.state)
+        console.log('State @ Create',this.state)
         let form = this.handleFormDisplay()
 
         return(
@@ -190,6 +196,24 @@ class Create extends Component{
                     </form>
                     {form}
                 </div>
+                <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                open={this.state.snackbar}
+                autoHideDuration={3000}
+                onClose={()=>this.handleUserInput('snackbar',false)}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{this.state.snackbarMessage}</span>}
+                action={[
+                    <button key="close" onClick={()=>this.handleUserInput('snackbar',false)}>
+                    Close
+                    </button>,
+                ]}
+                />
             </div>
         )
         
