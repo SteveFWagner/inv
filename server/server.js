@@ -18,12 +18,7 @@ const pgPool = new pg.Pool({
 const auth = require('./authController')
 const ct = require('./apiController')
 
-//hosting below
 
-app.get('*', (req, res)=>{
-    res.sendFile(path.join(__dirname, '../build/index.html'));
-});
-//hosting^^^
 
 app.use(express.json())
 app.use(session({
@@ -70,3 +65,12 @@ massive(CONNECTION_STRING).then(db =>{
     app.put('/api/update/onhand/material/:id', ct.updateOnhandMaterial)
     app.put('/api/update/onhand/product/:id', ct.updateOnhandProduct)
     app.delete('/api/delete/template/:id', ct.deleteTemplate)
+
+
+
+//hosting below
+
+app.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+});
+//hosting^^^
