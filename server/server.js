@@ -18,7 +18,7 @@ const pgPool = new pg.Pool({
 const auth = require('./authController')
 const ct = require('./apiController')
 
-
+app.use( express.static( `${__dirname}/../build` ) )
 
 app.use(express.json())
 app.use(session({
