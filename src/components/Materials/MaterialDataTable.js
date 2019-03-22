@@ -3,6 +3,9 @@ import MUIDataTable from 'mui-datatables'
 import Axios from 'axios'
 import MaterialModal from './MaterialModal'
 import Modal from '@material-ui/core/Modal'
+import Snackbar from '@material-ui/core/Snackbar'
+import Button from '@material-ui/core/Button'
+import CloseIcon from '@material-ui/icons/Close'
 
 export default class MaterialDataTable extends Component{
     constructor(props){
@@ -10,7 +13,9 @@ export default class MaterialDataTable extends Component{
         this.state={
             materials:[],
             modal:false,
-            modalData:[]
+            modalData:[],
+            snackbar:false, 
+            snackbarMessage:``
         }
     }
         
@@ -38,6 +43,12 @@ export default class MaterialDataTable extends Component{
             this.setState({ modal: false })
         }
 
+        handleUserInput=(prop,val)=>{
+            this.setState({
+                [prop]:val
+            })
+        }
+
     render(){
         // console.log(this.state)
         const columns = [
@@ -52,14 +63,8 @@ export default class MaterialDataTable extends Component{
         const options = {
             filterType: 'dropdown',
             onRowsDelete:(rowsDeleted)=>{
-                console.log(rowsDeleted)
-                alert(
-                    `
-                    You cannot delete Materials due to dependancies.
-
-                    Please update the onhand as needed.` 
-                )
-                
+                this.handleUserInput('snackbarMessage', `Cannot Delete Materials Due to Dependancies. Please Update onhand as needed.`)
+                this.handleUserInput('snackbar', true)  
             },
             onRowClick: (rowData, rowMeta)=>{
                 console.log({rowData},{rowMeta})
@@ -75,8 +80,27 @@ export default class MaterialDataTable extends Component{
             options={options}
             />
             <Modal open={this.state.modal}>
-                <MaterialModal closeModal={this.handleModalClose} rowData={this.state.modalData} refresh={this.getMaterials}/>
+                <MaterialModal closeModal={this.handleModalClose} rowData={this.state.modalData} 
+                refresh={this.getMaterials} refresh2={this.props.refresh2} snackbar={this.handleUserInput}/>
             </Modal>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                open={this.state.snackbar}
+                autoHideDuration={6000}
+                onClose={()=>this.handleUserInput('snackbar',false)}
+                ContentProps={{
+                    'aria-describedby': 'message-id',
+                }}
+                message={<span id="message-id">{this.state.snackbarMessage}</span>}
+                action={[
+                    <Button key="close" onClick={()=>this.handleUserInput('snackbar',false)} style={{color:'white'}}>
+                        <CloseIcon/>
+                    </Button>,
+                ]}
+                />
             </>
         )
     }

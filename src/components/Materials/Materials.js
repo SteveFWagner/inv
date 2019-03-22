@@ -31,7 +31,7 @@ class Materials extends Component{
                     <Typography variant='h6'>TOTAL COST ONHAND: ${Number(this.state.totCostOH).toLocaleString()}</Typography>
                     <Typography variant='h6'>UNIQUE MATERIALS: {Number(this.state.uniqueMats).toLocaleString()}</Typography>
                 </div>
-                    <MaterialDataTable/>
+                    <MaterialDataTable refresh2={this.getInfo}/>
             </div>
         )
     }

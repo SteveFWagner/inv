@@ -116,7 +116,9 @@ class newTemplateForm extends Component{
         })
         Axios.post('/api/create/template',{productName,addMatIds})
         .then(res => {
-            alert(`Success! ${productName} created.`)
+            // alert(`Success! ${productName} created.`)
+            this.props.reset('snackbarMessage',`Success! ${productName} created.`)
+            this.props.reset('snackbar',true)
             this.props.reset('selectedTemplate', '')
             this.props.reset('dropdown', '')
         })

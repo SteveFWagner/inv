@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Typography from '@material-ui/core/Typography'
 // import SnackBar from '../SnackBar/SnackBar'
 import Snackbar from '@material-ui/core/Snackbar'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import CloseIcon from '@material-ui/icons/Close'
 
 class Create extends Component{
     constructor(props){
@@ -78,6 +80,10 @@ class Create extends Component{
         console.log('Check this:', materials, qtyToProduce, {productId})
         Axios.put(`/api/create/products/${productId}`,{materials, qtyToProduce})
         .then(res => {
+            this.setState({
+                snackbarMessage:`Success! Product Created.`,
+                snackbar:true,
+            })
             this.getTemplates()
         })
         .catch(err => alert('There was an error!'))
@@ -202,16 +208,16 @@ class Create extends Component{
                     horizontal: 'right',
                 }}
                 open={this.state.snackbar}
-                autoHideDuration={3000}
+                autoHideDuration={6000}
                 onClose={()=>this.handleUserInput('snackbar',false)}
                 ContentProps={{
                     'aria-describedby': 'message-id',
                 }}
                 message={<span id="message-id">{this.state.snackbarMessage}</span>}
                 action={[
-                    <button key="close" onClick={()=>this.handleUserInput('snackbar',false)}>
-                    Close
-                    </button>,
+                    <Button key="close" onClick={()=>this.handleUserInput('snackbar',false)} style={{color:'white'}}>
+                        <CloseIcon/>
+                    </Button>,
                 ]}
                 />
             </div>

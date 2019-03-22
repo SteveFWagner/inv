@@ -40,7 +40,10 @@ export default class ProductModal extends Component{
         Axios.put(`/api/update/onhand/product/${id}`,{name, onHand})
         .then(() => {
             this.props.refresh()
+            this.props.refresh2()
             this.props.closeModal()
+            this.props.snackbar('snackbarMessage', `Updated!`)
+            this.props.snackbar('snackbar', true)
         })
 
     }

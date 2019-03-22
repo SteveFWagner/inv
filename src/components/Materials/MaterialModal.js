@@ -45,7 +45,10 @@ export default class MaterialModal extends Component{
         Axios.put(`/api/update/onhand/material/${id}`,{name, onHand, orderPoint, cost, unit})
         .then(() => {
             this.props.refresh()
+            this.props.refresh2()
             this.props.closeModal()
+            this.props.snackbar('snackbarMessage', `Updated!`)
+            this.props.snackbar('snackbar', true)
         })
 
     }
