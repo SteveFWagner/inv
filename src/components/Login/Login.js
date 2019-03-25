@@ -48,13 +48,15 @@ class Login extends Component{
         })
     }
 
-    handleRegister(){
+    handleRegister =async () =>{
         const {email, password} = this.state
-        Axios.post('/auth/register', {email,password}).then(res => {
-            this.props.updateUser(res.data)
-        }).then(
-            this.props.history.push('/overview')
-        ).catch(err => alert("Email already exists!"))
+        try{
+            let res = await Axios.post('/auth/register', {email,password})
+            await this.props.updateUser(res.data)
+            await this.props.history.push('/about')
+        }catch(err){
+            alert("Email already exists!")
+        }
     }
 
     handleLogin = async () =>{

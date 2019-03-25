@@ -17,6 +17,7 @@ import Extension from '@material-ui/icons/ExtensionOutlined'
 import Build from '@material-ui/icons/Build'
 import Widgets from '@material-ui/icons/Widgets'
 import Logo from '../../images/Logo.png'
+import HelpOutline from '@material-ui/icons/HelpOutline'
 
 
 class Nav extends Component{
@@ -104,6 +105,10 @@ class Nav extends Component{
                                     <ListItem button key='Create' component={Link} to='/create'> 
                                         <Build/>
                                         <ListItemText primary='Create'/>
+                                    </ListItem>
+                                    <ListItem button key='About' component={Link} to='/about'> 
+                                        <HelpOutline/>
+                                        <ListItemText primary='About'/>
                                     </ListItem>
                                 </List> 
                                 </div>
