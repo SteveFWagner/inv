@@ -67,7 +67,7 @@ export default class MaterialDataTable extends Component{
                 this.handleUserInput('snackbar', true)  
             },
             onRowClick: (rowData, rowMeta)=>{
-                console.log({rowData},{rowMeta})
+                // console.log({rowData},{rowMeta})
                 this.handleModalOpen(rowData)
             }
         }

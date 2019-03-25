@@ -72,7 +72,7 @@ export default class ProductDataTable extends Component{
                 })
             },
             onRowClick: (rowData, rowMeta)=>{
-                console.log({rowData},{rowMeta})
+                // console.log({rowData},{rowMeta})
                 this.handleModalOpen(rowData)
             }
         }
