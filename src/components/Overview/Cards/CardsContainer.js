@@ -8,7 +8,7 @@ export default function CardsContainer(props){
     })
     return(
         <div>
-            <Grid container spacing={24} style={{padding:24}}>
+            <Grid container spacing={24} style={{width:'100%', padding:10, margin:0}}>
                 {mappedCards}
             </Grid>
         </div>

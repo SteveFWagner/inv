@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import TotalCostPie from './TotalCostPie'
 import Top5ProductCost from './Top5ProductCost'
 import Top5MaterialCost from './Top5MaterialCost'
+import Top5ProductCount from './Top5ProductCount'
+import Top5MaterialCount from './Top5MaterialCount'
 
 export default class KPIContainer extends Component{
     constructor(props) {
@@ -39,9 +41,8 @@ export default class KPIContainer extends Component{
                 <TotalCostPie size={size}/>
                 <Top5ProductCost size={size}/>
                 <Top5MaterialCost size={size}/>
-                {/* <TotalCostPie size={size}/>
-                <TotalCostPie size={size}/> */}
-                
+                <Top5ProductCount size={size}/>
+                <Top5MaterialCount size={size}/>
             </div>
         )
     }

@@ -13,7 +13,9 @@ class Login extends Component{
         super(props)
         this.state={
             email:``,
-            password:``
+            password:``,
+            width:0,
+            height:0
         }
         this.handleUserInput=this.handleUserInput.bind(this)
         this.handleRegister=this.handleRegister.bind(this)
@@ -64,14 +66,13 @@ class Login extends Component{
         }catch(err){
             alert('Incorrect Login')
         }
-        
     }
 
     render(){
         return(
             <div style={{display:'flex', justifyContent:'center', backgroundColor:'#252525', width:'100%', height:'100vh'}}>
-                <Paper elevation={1} style={{width:'80vw',height:'65vh', display:'flex', flexDirection:'column', 
-                alignItems:'center', marginTop:50}}>
+                <Paper elevation={1} style={{width:'80%',height:'65%', display:'flex', flexDirection:'column', 
+                alignItems:'center', marginTop:50, maxWidth:450, maxHeight:450}}>
                    <div style={{background:'#1EABFF', width:'100%', borderRadius:3, display:'flex', justifyContent:'center'}}>
                         <img src={Logo} alt='inv' style={{height: '15vh', width:'auto'}}/>
                    </div>

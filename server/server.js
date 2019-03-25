@@ -1,4 +1,4 @@
-const path = require('path'); // Usually moved to the start of file
+const path = require('path'); // hosting
 require('dotenv').config()
 const express = require('express')
 const massive = require('massive')
@@ -18,7 +18,7 @@ const pgPool = new pg.Pool({
 const auth = require('./authController')
 const ct = require('./apiController')
 
-app.use( express.static( `${__dirname}/../build` ) )
+app.use( express.static( `${__dirname}/../build` ) )//hosting
 
 app.use(express.json())
 app.use(session({
@@ -30,7 +30,7 @@ app.use(session({
     resave:false,
     saveUninitialized:true,
     cookie:{
-        maxAge:1000000000
+        maxAge:(1000*60*60*24)
     }
 }))
 
@@ -73,4 +73,3 @@ massive(CONNECTION_STRING).then(db =>{
 app.get('*', (req, res)=>{
     res.sendFile(path.join(__dirname, '../build/index.html'));
 });
-//hosting^^^
