@@ -15,7 +15,7 @@ export default class CardModal extends Component{
 
 
     render(){
-        console.log(this.props)
+        // console.log(this.props)
         let display = null
         if(this.props.data.products){
             display = this.props.data.products.map((product,i) =>{

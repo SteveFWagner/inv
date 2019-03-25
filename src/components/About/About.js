@@ -27,16 +27,16 @@ export default class About extends Component{
 
 
     render(){
-        console.log(this.state)    
-    let displayImage = ``
+        // console.log(this.state)    
+        let displayImage = ``
 
-    if(this.state.width > 730){
-        displayImage = <div style={{overflow:'hidden'}}>
-            <img src={LargePackage} alt="package logo"/>
-        </div>
-    }else{
-        displayImage = null
-    }
+        if(this.state.width > 730){
+            displayImage = <div style={{overflow:'hidden'}}>
+                <img src={LargePackage} alt="package logo"/>
+            </div>
+        }else{
+            displayImage = null
+        }
         return(
             <div style={{background:'#252525', height:'100%'}}>
                 <Typography variant='h3' style={{color:'white'}}>About.</Typography>
